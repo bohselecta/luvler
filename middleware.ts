@@ -16,7 +16,8 @@ export default clerkMiddleware(async (auth, req) => {
   // Public routes are accessible without auth
   // Protected routes will redirect to sign-in
   if (!isPublicRoute(req)) {
-    await auth().protect()
+    const session = await auth()
+    session.protect()
   }
 })
 
