@@ -11,9 +11,9 @@ export interface Tier {
 
 export const TIERS: Tier[] = [
   { id: 'free', name: 'Discovery', priceMonthly: 0, analysesPerMonth: 5, features: ['1 saved plan', 'Community resources'] },
-  { id: 'individual', name: 'Individual', priceMonthly: 12, analysesPerMonth: 50, features: ['5 active plans', 'Export & share'] },
-  { id: 'clinician', name: 'Clinician', priceMonthly: 49, analysesPerMonth: 300, features: ['Client folders', 'Templates', 'CSV export'] },
-  { id: 'clinic', name: 'Clinic / Team', priceMonthly: 199, analysesPerMonth: 1500, seats: 5, features: ['Pooled usage', 'Roles & permissions'] },
+  { id: 'individual', name: 'Individual', priceMonthly: 6, analysesPerMonth: 50, features: ['5 active plans', 'Export & share'] },
+  { id: 'clinician', name: 'Clinician', priceMonthly: 25, analysesPerMonth: 300, features: ['Client folders', 'Templates', 'CSV export'] },
+  { id: 'clinic', name: 'Clinic / Team', priceMonthly: 99, analysesPerMonth: 1500, seats: 5, features: ['Pooled usage', 'Roles & permissions'] },
   { id: 'enterprise', name: 'Enterprise', priceMonthly: 'contact', features: ['SSO', 'BAA addendum', 'Priority support'] },
 ]
 
