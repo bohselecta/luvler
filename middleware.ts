@@ -12,12 +12,14 @@ const isPublicRoute = createRouteMatcher([
 ])
 
 export default clerkMiddleware(async (auth, req) => {
-  // Let Clerk handle auth automatically
   // Public routes are accessible without auth
-  // Protected routes will redirect to sign-in
+  // Protected routes check for authentication
   if (!isPublicRoute(req)) {
-    const session = await auth()
-    session.protect()
+    const { userId } = await auth()
+    if (!userId) {
+      // Clerk will automatically redirect to sign-in
+      return Response.redirect(new URL('/login', req.url))
+    }
   }
 })
 
