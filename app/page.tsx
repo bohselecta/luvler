@@ -18,7 +18,7 @@ export default function RouterScreen() {
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-6">
-      <div className="max-w-6xl w-full">
+      <div className="max-w-[1280px] w-full px-4 md:px-8">
         {/* Header */}
         <div className="mb-16">
           <div className="flex items-center justify-between">
@@ -36,11 +36,11 @@ export default function RouterScreen() {
         </div>
 
         {/* Path Selection Cards */}
-        <div className="grid gap-6 mb-12">
+        <div className="grid gap-6 mb-12 md:grid-cols-12">
           {/* Self-Advocacy Path */}
           <button
             onClick={() => handlePathSelect('self-advocacy')}
-            className="group w-full bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-8 text-left border border-gray-100 hover:border-primary-200"
+            className="group w-full bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-8 text-left border border-gray-100 hover:border-primary-200 md:col-span-6"
           >
             <div className="flex items-center gap-6">
               <div className="bg-gradient-to-br from-primary-100 to-primary-200 p-4 rounded-2xl group-hover:scale-105 transition-transform">
@@ -67,7 +67,7 @@ export default function RouterScreen() {
           {/* Professional Path */}
           <button
             onClick={() => handlePathSelect('professional')}
-            className="group w-full bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-8 text-left border border-gray-100 hover:border-secondary-200"
+            className="group w-full bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-8 text-left border border-gray-100 hover:border-secondary-200 md:col-span-6"
           >
             <div className="flex items-center gap-6">
               <div className="bg-gradient-to-br from-secondary-100 to-secondary-200 p-4 rounded-2xl group-hover:scale-105 transition-transform">
