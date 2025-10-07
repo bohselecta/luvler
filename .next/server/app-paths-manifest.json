@@ -1,12 +1,12 @@
 {
-  "/dashboard/page": "app/dashboard/page.js",
-  "/consent/page": "app/consent/page.js",
-  "/login/page": "app/login/page.js",
-  "/legal/privacy/page": "app/legal/privacy/page.js",
   "/legal/terms/page": "app/legal/terms/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/legal/privacy/page": "app/legal/privacy/page.js",
   "/page": "app/page.js",
+  "/consent/page": "app/consent/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/login/page": "app/login/page.js",
   "/pricing/page": "app/pricing/page.js",
-  "/professional/page": "app/professional/page.js",
   "/self-advocacy/page": "app/self-advocacy/page.js",
-  "/_not-found/page": "app/_not-found/page.js"
+  "/professional/page": "app/professional/page.js"
 }

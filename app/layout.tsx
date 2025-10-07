@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/shared/theme-provider'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Footer } from '@/components/shared/footer'
+import Script from 'next/script'
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
@@ -77,6 +78,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="font-sans antialiased">
+        <Script src="https://identity.netlify.com/v1/netlify-identity-widget.js" strategy="afterInteractive" />
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -92,6 +94,7 @@ export default function RootLayout({
               <nav className="flex items-center gap-6 text-sm">
                 <Link href="/pricing" className="text-gray-700 dark:text-gray-300 hover:underline">Pricing</Link>
                 <Link href="/consent" className="text-gray-700 dark:text-gray-300 hover:underline">Informed Use</Link>
+                <Link href="/login" className="text-gray-700 dark:text-gray-300 hover:underline">Sign in</Link>
               </nav>
             </div>
           </header>
