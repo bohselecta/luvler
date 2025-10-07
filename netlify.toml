@@ -1,12 +1,27 @@
 [build]
   command = "npm run build"
   publish = ".next"
-
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
+  ignore = "/bin/false"
 
 [build.environment]
   NODE_VERSION = "18"
+
+[build.processing]
+  skip_processing = false
+
+[build.processing.css]
+  bundle = true
+  minify = true
+
+[build.processing.js]
+  bundle = true
+  minify = true
+
+[build.processing.html]
+  pretty_urls = true
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
 
 [functions]
   directory = "netlify/functions"
@@ -31,25 +46,6 @@
     Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
     Access-Control-Allow-Headers = "Content-Type, Authorization"
 
-# Security headers for production
-[build.processing]
-  skip_processing = false
-
-[build.processing.css]
-  bundle = true
-  minify = true
-
-[build.processing.js]
-  bundle = true
-  minify = true
-
-[build.processing.html]
-  pretty_urls = true
-
 # Environment variables (set in Netlify dashboard)
 # ANTHROPIC_API_KEY = "your_api_key_here"
 # NEXT_PUBLIC_SITE_URL = "https://luvler.com"
-
-# Build optimization
-[build]
-  ignore = "/bin/false"
