@@ -1,8 +1,10 @@
 'use client';
 
+import dynamic from 'next/dynamic'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-// Netlify Identity removed for Vercel migration. Keep demo stub.
+
+const DynamicSignIn = dynamic(async () => (await import('@clerk/nextjs')).SignIn, { ssr: false })
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -13,26 +15,12 @@ export default function LoginPage() {
   return (
     <div className="min-h-[60vh] flex items-center justify-center px-4">
       <div className="luvler-card w-full max-w-md">
-        <h1 className="text-2xl font-bold text-gray-900">Sign in</h1>
-        <p className="text-gray-600 mt-2 text-sm">Demo login — auth provider to be wired on Vercel.</p>
-        <div className="mt-6 space-y-4">
-          <input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" className="luvler-input" />
-          <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" className="luvler-input" />
-          <button
-            disabled={loading}
-            onClick={async () => {
-              setLoading(true)
-              try {
-                router.push('/dashboard')
-              } finally {
-                setLoading(false)
-              }
-            }}
-            className="luvler-button-primary w-full"
-          >
-            {loading ? 'Signing in…' : 'Sign in'}
-          </button>
-        </div>
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">Sign in</h1>
+        {process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ? (
+          <DynamicSignIn appearance={{ elements: { formButtonPrimary: 'luvler-button-primary' } }} redirectUrl="/dashboard" />
+        ) : (
+          <p className="text-gray-700">Set <code className="font-mono">NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY</code> and <code className="font-mono">CLERK_SECRET_KEY</code> in Vercel to enable Clerk.</p>
+        )}
       </div>
     </div>
   )

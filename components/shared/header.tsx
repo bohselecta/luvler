@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { Heart, BookOpen, Home } from 'lucide-react';
+import { UserButton } from '@clerk/nextjs'
 
 interface HeaderProps {
   title?: string;
@@ -44,11 +45,11 @@ export function Header({
           </div>
 
           <div className="flex items-center gap-4">
-            {/* Luvler Logo */}
             <div className="flex items-center gap-2">
               <Image src="/logo.png" width={24} height={24} alt="" />
               <span className="text-lg font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent font-display">Luvler</span>
             </div>
+            <UserButton afterSignOutUrl="/" />
           </div>
         </div>
       </div>
