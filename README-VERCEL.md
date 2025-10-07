@@ -32,7 +32,7 @@ You must manually add these in Vercel → Project Settings → Environment Varia
 - `ANTHROPIC_MODEL_HAIKU` (optional, defaults to `claude-3-5-haiku-20241022`)
 - `ANTHROPIC_MODEL_SONNET` (optional, defaults to `claude-3-7-sonnet-20250219`)
 - `ADMIN_ALLOWLIST` (comma-separated Clerk user IDs for admin dashboard access)
-- `NEXT_PUBLIC_SITE_URL` (your production URL, e.g. `https://luvler.vercel.app`)
+- `NEXT_PUBLIC_SITE_URL` (your production URL, e.g. `https://luvler.com`)
 
 ### Stripe (Optional, for production payments)
 - `STRIPE_SECRET_KEY`

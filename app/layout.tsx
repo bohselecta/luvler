@@ -15,7 +15,7 @@ const dmSans = DM_Sans({
   display: 'swap',
 })
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://luvler.vercel.app'
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://luvler.com'
 
 export const metadata: Metadata = {
   title: 'Luvler - Love to Learn, Step by Step',
