@@ -1,58 +1,17 @@
 'use client';
 
 import Link from 'next/link'
+import { TIERS } from '@/lib/pricing'
 
-const tiers = [
-  {
-    id: 'free',
-    name: 'Discovery',
-    price: '$0',
-    description: 'Try Luvler with limited analyses and one saved plan.',
-    features: [
-      '5 goal analyses / month',
-      '1 saved plan',
-      'Community resources',
-    ],
-    cta: 'Get started',
-  },
-  {
-    id: 'individual',
-    name: 'Individual',
-    price: '$12/mo',
-    description: 'For parents and adults building independence routines.',
-    features: [
-      '50 goal analyses / month',
-      'Up to 5 active plans',
-      'Exports & sharing',
-    ],
-    cta: 'Start 7‑day trial',
-    highlighted: true,
-  },
-  {
-    id: 'clinician',
-    name: 'Clinician',
-    price: '$49/mo',
-    description: 'For solo BCBAs and therapists with client folders.',
-    features: [
-      '300 analyses / month',
-      'Client folders & templates',
-      'CSV exports',
-    ],
-    cta: 'Start 14‑day trial',
-  },
-  {
-    id: 'clinic',
-    name: 'Clinic / Team',
-    price: '$199/mo',
-    description: '5 seats, pooled usage, roles and audit trail.',
-    features: [
-      '1,500 analyses / month (pooled)',
-      '5 seats included',
-      'Roles & permissions',
-    ],
-    cta: 'Book a demo',
-  },
-]
+const tiers = TIERS.map(t => ({
+  id: t.id,
+  name: t.name,
+  price: t.priceMonthly === 'contact' ? 'Contact' : `$${t.priceMonthly}/mo`,
+  description: t.id === 'individual' ? 'For parents and adults building independence routines.' : t.id === 'clinician' ? 'For solo BCBAs and therapists with client folders.' : t.id === 'clinic' ? '5 seats, pooled usage, roles and audit trail.' : t.id === 'free' ? 'Try Luvler with limited analyses and one saved plan.' : 'Custom plan for organizations.',
+  features: t.features,
+  cta: t.id === 'free' ? 'Get started' : t.id === 'clinic' || t.id === 'enterprise' ? 'Book a demo' : 'Start trial',
+  highlighted: t.id === 'individual',
+}))
 
 export default function PricingPage() {
   return (
@@ -75,7 +34,7 @@ export default function PricingPage() {
                 ))}
               </ul>
               <div className="mt-6">
-                <Link href="#" className="luvler-button-primary w-full inline-flex justify-center">{t.cta}</Link>
+                <Link href="#" onClick={async (e) => { e.preventDefault(); await fetch('/api/create-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ tier: t.id }) }) }} className="luvler-button-primary w-full inline-flex justify-center">{t.cta}</Link>
               </div>
             </div>
           ))}

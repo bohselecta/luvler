@@ -1,9 +1,13 @@
+
 'use client';
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function ConsentPage() {
   const [accepted, setAccepted] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const router = useRouter()
 
   return (
     <div className="min-h-screen bg-white">
@@ -35,7 +39,21 @@ export default function ConsentPage() {
             <input type="checkbox" className="mt-1" checked={accepted} onChange={(e) => setAccepted(e.target.checked)} />
             <span className="text-gray-700">I understand these limitations, and I consent to use Luvler for educational and planning purposes. For clinical decisions, I will consult a qualified professional.</span>
           </label>
-          <button disabled={!accepted} className="luvler-button-primary mt-4 disabled:opacity-50">Continue</button>
+          <button
+            disabled={!accepted || saving}
+            onClick={async () => {
+              try {
+                setSaving(true)
+                await fetch('/api/save-consent', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ version: 'v1', userId: 'guest' }) })
+                router.push('/dashboard')
+              } finally {
+                setSaving(false)
+              }
+            }}
+            className="luvler-button-primary mt-4 disabled:opacity-50"
+          >
+            {saving ? 'Saving…' : 'Continue'}
+          </button>
         </div>
       </div>
     </div>
