@@ -37,7 +37,7 @@ export default function CompanionPage() {
           autoGenerate={true}
         />
         <BudgetJars />
-        <TrackMap />
+        <TrackMap defaultSlug={(defaults?.interests && defaults.interests.includes('illustration')) ? 'illustration' : 'general'} autoLoad={true} />
       </div>
     </div>
   )

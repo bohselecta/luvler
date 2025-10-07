@@ -5,7 +5,6 @@ import { ThemeProvider } from '@/components/shared/theme-provider'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Footer } from '@/components/shared/footer'
-import Script from 'next/script'
 import { Analytics } from '@/components/shared/analytics'
 
 const dmSans = DM_Sans({
@@ -14,6 +13,8 @@ const dmSans = DM_Sans({
   variable: '--font-dm-sans',
   display: 'swap',
 })
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://luvler.vercel.app'
 
 export const metadata: Metadata = {
   title: 'Luvler - Love to Learn, Step by Step',
@@ -27,14 +28,14 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://flourishing-crepe-f9591e.netlify.app'),
+  metadataBase: new URL(siteUrl),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     title: 'Luvler - Love to Learn, Step by Step',
     description: 'An autism-friendly goal setting and self-advocacy tool that helps break down tasks into clear, manageable steps.',
-    url: 'https://flourishing-crepe-f9591e.netlify.app',
+    url: siteUrl,
     siteName: 'Luvler',
     images: [{ url: '/og.png' }],
     locale: 'en_US',
@@ -79,7 +80,6 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="font-sans antialiased">
-        <Script src="https://identity.netlify.com/v1/netlify-identity-widget.js" strategy="afterInteractive" />
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

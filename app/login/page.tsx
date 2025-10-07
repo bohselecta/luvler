@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { identity } from '@/lib/auth'
+// Netlify Identity removed for Vercel migration. Keep demo stub.
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -14,17 +14,15 @@ export default function LoginPage() {
     <div className="min-h-[60vh] flex items-center justify-center px-4">
       <div className="luvler-card w-full max-w-md">
         <h1 className="text-2xl font-bold text-gray-900">Sign in</h1>
-        <p className="text-gray-600 mt-2 text-sm">Demo login (Netlify Identity wiring next).</p>
+        <p className="text-gray-600 mt-2 text-sm">Demo login — auth provider to be wired on Vercel.</p>
         <div className="mt-6 space-y-4">
           <input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" className="luvler-input" />
           <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" className="luvler-input" />
           <button
             disabled={loading}
             onClick={async () => {
-              if (!identity) return
               setLoading(true)
               try {
-                await identity.open('login')
                 router.push('/dashboard')
               } finally {
                 setLoading(false)
