@@ -8,6 +8,9 @@ import Image from 'next/image'
 import { Footer } from '@/components/shared/footer'
 import { Analytics } from '@/components/shared/analytics'
 
+// Force dynamic rendering for all pages since Clerk keys are runtime-only
+export const dynamic = 'force-dynamic'
+
 const dmSans = DM_Sans({
   subsets: ['latin'],
   weight: ['400', '500', '700'],
