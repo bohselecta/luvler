@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Heart, BookOpen, Users, Briefcase, ChevronRight, Sparkles } from 'lucide-react';
+import Image from 'next/image';
 
 export default function RouterScreen() {
   const [selectedPath, setSelectedPath] = useState<string | null>(null);
@@ -21,7 +22,7 @@ export default function RouterScreen() {
         {/* Header */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full mb-8 shadow-xl">
-            <Heart className="w-12 h-12 text-white" />
+            <Image src="/logo.png" width={56} height={56} alt="" />
           </div>
           <h1 className="text-5xl font-bold text-gray-900 mb-6 font-display">
             Evidence‑based goals with a gentle, autism‑friendly design
