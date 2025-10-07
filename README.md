@@ -126,9 +126,39 @@ luvler/
 3. Add the following variables:
 
 ```
+NODE_VERSION=18
 ANTHROPIC_API_KEY=your_api_key_here
 NEXT_PUBLIC_SITE_URL=https://luvler.com
+SITE_URL=https://<your-site>.netlify.app
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_PRICE_MAP={"individual":"price_x","clinician":"price_y","clinic":"price_z"}
 ```
+
+### Identity (Auth)
+
+1. In Netlify → Identity → Enable Identity.
+2. (Optional) Allow magic links. Invite your own email to test.
+3. The app loads the Identity widget globally and uses helpers in `lib/auth.ts`.
+
+### Stripe (Test Mode)
+
+1. In Stripe, create recurring Prices for each tier and copy their IDs into `STRIPE_PRICE_MAP` (JSON).
+2. Add a webhook endpoint in Stripe → Developers → Webhooks pointing to:
+
+```
+https://<your-site>.netlify.app/.netlify/functions/billing-webhook
+```
+
+Subscribe to events:
+
+```
+checkout.session.completed
+customer.subscription.created
+customer.subscription.updated
+customer.subscription.deleted
+```
+
+3. (Optional) Add `STRIPE_WEBHOOK_SECRET` and extend the function to verify signatures.
 
 ### Build Settings
 The `netlify.toml` file is pre-configured with:
@@ -136,6 +166,19 @@ The `netlify.toml` file is pre-configured with:
 - Serverless functions directory
 - Security headers
 - CDN optimization
+
+### Serverless API Endpoints
+
+- `/api/save-consent` → `netlify/functions/save-consent.ts`
+- `/api/create-checkout` → `netlify/functions/create-checkout.ts`
+- `/api/billing-webhook` → `netlify/functions/billing-webhook.ts`
+- `/api/get-usage` → `netlify/functions/get-usage.ts`
+- `/api/log-client` → `netlify/functions/log-client.ts`
+
+### Data & Migrations
+
+- Initial schema: `netlify/postgres/migrations/001_init.sql` (users, orgs, memberships, subscriptions, consents, usage).
+- Usage meter currently returns a stub from `/api/get-usage`; swap to Postgres counters or Netlify KV when available, and surface meters on `/dashboard`.
 
 ### Custom Domain
 1. Add `luvler.com` as a custom domain in Netlify
