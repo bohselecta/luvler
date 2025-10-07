@@ -24,10 +24,10 @@ export default function RouterScreen() {
             <Heart className="w-12 h-12 text-white" />
           </div>
           <h1 className="text-5xl font-bold text-gray-900 mb-6 font-display">
-            Welcome to <span className="bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">Luvler</span>
+            Evidence‑based goals with a gentle, autism‑friendly design
           </h1>
           <p className="text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed">
-            Love to learn, step by step. Choose your path to achieve your goals with care and understanding.
+            Luvler turns everyday goals into clear, step‑by‑step plans—grounded in ABA best practices and written in respectful, plain language for families and clinicians.
           </p>
         </div>
 
@@ -53,7 +53,7 @@ export default function RouterScreen() {
                   Get help breaking down tasks into clear, manageable steps you can follow at your own pace.
                 </p>
                 <div className="mt-4 flex items-center gap-2 text-primary-600 font-medium">
-                  <span>Start with love and understanding</span>
+                  <span>Create my step‑by‑step plan</span>
                   <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </div>
               </div>
@@ -71,7 +71,7 @@ export default function RouterScreen() {
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
-                  <h2 className="text-2xl font-bold text-gray-900">I'm helping someone</h2>
+                  <h2 className="text-2xl font-bold text-gray-900">I’m a clinician or caregiver</h2>
                   <div className="bg-secondary-100 text-secondary-700 px-3 py-1 rounded-full text-sm font-medium">
                     Professional
                   </div>
@@ -80,7 +80,7 @@ export default function RouterScreen() {
                   Access comprehensive ABA tools for clinicians and parents with evidence-based goal setting and progress tracking.
                 </p>
                 <div className="mt-4 flex items-center gap-2 text-secondary-600 font-medium">
-                  <span>Professional support with care</span>
+                  <span>Build a research‑backed plan</span>
                   <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </div>
               </div>

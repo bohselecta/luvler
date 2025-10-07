@@ -85,6 +85,7 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
+          <a href="#main" className="sr-only focus-visible:focus-visible not-sr-only absolute left-4 top-4 z-50 bg-white text-gray-900 px-3 py-2 rounded">Skip to content</a>
           <header className="bg-white/80 dark:bg-gray-900/70 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-40 backdrop-blur">
             <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
               <Link href="/" className="flex items-center gap-2">
@@ -99,7 +100,9 @@ export default function RootLayout({
             </div>
           </header>
 
-          {children}
+          <main id="main">
+            {children}
+          </main>
           <Footer />
         </ThemeProvider>
       </body>
