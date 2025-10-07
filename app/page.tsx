@@ -116,6 +116,15 @@ export default function RouterScreen() {
           </div>
         </div>
 
+        {/* Start Companion CTA */}
+        <div className="luvler-card mt-8 text-center">
+          <h3 className="text-xl font-bold text-gray-900">Ready to try the Companion?</h3>
+          <p className="text-gray-700 mt-2">Answer 60 seconds of questions to get a quick‑start pack.</p>
+          <div className="mt-4">
+            <a href="/onboarding" className="luvler-button-primary">Start Companion</a>
+          </div>
+        </div>
+
         {/* Footer */}
         <div className="text-center mt-12 text-gray-600">
           <p className="mb-2">All paths use evidence-based methods to help achieve goals with dignity and respect.</p>

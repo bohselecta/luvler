@@ -94,6 +94,7 @@ export default function RootLayout({
                 <span className="font-bold text-gray-900 dark:text-gray-100">Luvler</span>
               </Link>
               <nav className="flex items-center gap-6 text-sm">
+                <Link href="/clients" className="text-gray-700 dark:text-gray-300 hover:underline">Clients</Link>
                 <Link href="/pricing" className="text-gray-700 dark:text-gray-300 hover:underline">Pricing</Link>
                 <Link href="/consent" className="text-gray-700 dark:text-gray-300 hover:underline">Informed Use</Link>
                 <Link href="/login" className="text-gray-700 dark:text-gray-300 hover:underline">Sign in</Link>

@@ -45,6 +45,9 @@ export default function ConsentPage() {
               try {
                 setSaving(true)
                 await fetch('/api/save-consent', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ version: 'v1', userId: 'guest' }) })
+                try {
+                  localStorage.setItem('luvler_consent_v1', 'true')
+                } catch {}
                 router.push('/dashboard')
               } finally {
                 setSaving(false)

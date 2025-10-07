@@ -87,6 +87,11 @@ export default function SelfAdvocacyPage() {
   ];
 
   const handleGenerateSteps = async () => {
+    if (typeof window !== 'undefined' && !localStorage.getItem('luvler_consent_v1')) {
+      alert('Please review and accept Informed Use before generating a plan.')
+      window.location.href = '/consent'
+      return
+    }
     if (!userGoal.trim()) {
       alert('Please enter what you want to get done');
       return;
