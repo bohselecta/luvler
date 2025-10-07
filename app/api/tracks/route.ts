@@ -10,7 +10,7 @@ export async function POST(request: Request) {
   try {
     const a = await auth()
     if (a.userId) {
-      const tier = await resolveTierForUser(a.userId)
+      const tier = await resolveTierForUser(a.userId, a.orgId as string | undefined)
       const limit = getLimitForTier(tier)
       const usage = await readUsage(a.userId)
       if (usage.used >= limit) {

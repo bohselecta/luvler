@@ -7,6 +7,7 @@ type UserRow = { userId: string; tier: string; used: number; limit: number }
 export default function AdminPage() {
   const [userId, setUserId] = useState('')
   const [tier, setTier] = useState('individual')
+  const [orgId, setOrgId] = useState('')
   const [rows, setRows] = useState<UserRow[]>([])
   const [loading, setLoading] = useState(false)
 
@@ -36,6 +37,28 @@ export default function AdminPage() {
             onClick={async () => {
               setLoading(true)
               await fetch('/api/admin/set-tier', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId, tier }) })
+              setLoading(false)
+            }}
+          >{loading ? 'Saving…' : 'Save'}</button>
+        </div>
+      </div>
+
+      <div className="luvler-card mt-6">
+        <h2 className="font-semibold text-gray-900">Set organization tier</h2>
+        <div className="grid md:grid-cols-3 gap-3 mt-3">
+          <input value={orgId} onChange={e => setOrgId(e.target.value)} placeholder="Clerk organizationId" className="luvler-input" />
+          <select value={tier} onChange={e => setTier(e.target.value)} className="luvler-input">
+            <option value="free">Free</option>
+            <option value="individual">Individual</option>
+            <option value="clinician">Clinician</option>
+            <option value="clinic">Clinic / Team</option>
+          </select>
+          <button
+            className="luvler-button-primary"
+            disabled={loading || !orgId}
+            onClick={async () => {
+              setLoading(true)
+              await fetch('/api/admin/set-org-tier', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ orgId, tier }) })
               setLoading(false)
             }}
           >{loading ? 'Saving…' : 'Save'}</button>

@@ -25,12 +25,12 @@
   --success-500: 34 197 94;
   --warning-500: 245 158 11;
 
-  /* Typography */
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-display: 'Inter Tight', 'Manrope', sans-serif;
-  --font-serif: 'Crimson Pro', serif;
+  /* Typography - Anthropic inspired */
+  --font-sans: 'ABC Favorit', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-display: 'ABC Favorit', 'Inter', system-ui, sans-serif;
+  --font-serif: 'Tiempos Text', Georgia, Cambria, 'Times New Roman', Times, serif;
   --color-text: 15 23 42;
-  --color-muted: 51 65 85;
+  --color-muted: 71 85 105;
 
   /* Spacing */
   --radius-sm: 0.125rem;
@@ -68,6 +68,9 @@
 html {
   scroll-behavior: smooth;
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 /* Respect user's motion preferences */

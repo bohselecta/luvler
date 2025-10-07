@@ -21,10 +21,10 @@ export default function RouterScreen() {
       <div className="max-w-[1280px] w-full px-4 md:px-8">
         {/* Header */}
         <div className="mb-16">
-          <h1 className="mt-10 text-[4.5rem] leading-[1.05] font-bold tracking-[-0.02em] text-slate-900 max-w-4xl">
+          <h1 className="mt-10 text-[3.5rem] md:text-[4rem] leading-[1.1] font-medium tracking-[-0.015em] text-slate-900 max-w-4xl font-display">
             Evidence‑based goals with a gentle, autism‑friendly design
           </h1>
-          <p className="mt-4 text-[1.125rem] leading-[1.6] text-slate-700 max-w-2xl">
+          <p className="mt-6 text-[1.0625rem] leading-[1.65] text-slate-600 max-w-2xl font-serif">
             Luvler turns everyday goals into clear, step‑by‑step plans—grounded in ABA best practices and written in respectful, plain language for families and clinicians.
           </p>
         </div>
@@ -42,12 +42,12 @@ export default function RouterScreen() {
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
-                  <h2 className="text-2xl font-bold text-gray-900">I am on the autism spectrum</h2>
+                  <h2 className="text-2xl font-semibold text-gray-900">I am on the autism spectrum</h2>
                   <div className="bg-primary-100 text-primary-700 px-3 py-1 rounded-full text-sm font-medium">
                     Self-Advocacy
                   </div>
                 </div>
-                <p className="text-gray-600 text-lg leading-relaxed">
+                <p className="text-slate-600 text-[1rem] leading-[1.6] font-serif">
                   Get help breaking down tasks into clear, manageable steps you can follow at your own pace.
                 </p>
                 <div className="mt-4 flex items-center gap-2 text-primary-600 font-medium">
@@ -69,12 +69,12 @@ export default function RouterScreen() {
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
-                  <h2 className="text-2xl font-bold text-gray-900">I’m a clinician or caregiver</h2>
+                  <h2 className="text-2xl font-semibold text-gray-900">I'm a clinician or caregiver</h2>
                   <div className="bg-secondary-100 text-secondary-700 px-3 py-1 rounded-full text-sm font-medium">
                     Professional
                   </div>
                 </div>
-                <p className="text-gray-600 text-lg leading-relaxed">
+                <p className="text-slate-600 text-[1rem] leading-[1.6] font-serif">
                   Access comprehensive ABA tools for clinicians and parents with evidence-based goal setting and progress tracking.
                 </p>
                 <div className="mt-4 flex items-center gap-2 text-secondary-600 font-medium">
