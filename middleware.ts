@@ -11,12 +11,12 @@ const isPublicRoute = createRouteMatcher([
   '/legal(.*)',
 ])
 
-export default clerkMiddleware((auth, req) => {
+export default clerkMiddleware(async (auth, req) => {
   // Let Clerk handle auth automatically
   // Public routes are accessible without auth
   // Protected routes will redirect to sign-in
   if (!isPublicRoute(req)) {
-    auth().protect()
+    await auth().protect()
   }
 })
 
