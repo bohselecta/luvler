@@ -8,7 +8,7 @@ export async function POST(request: Request) {
     try {
       const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
       const prompt = `Design a concise 5-step learning outline for topic "${slug}". Use plain language and progressive scaffolding. Output JSON: {"outline":[{"id":"a","title":"..."}, ...]}`
-      const msg = await anthropic.messages.create({ model: 'claude-3-haiku-20240307', max_tokens: 250, temperature: 0.3, messages: [{ role: 'user', content: prompt }] })
+      const msg = await anthropic.messages.create({ model: process.env.ANTHROPIC_MODEL_HAIKU || 'claude-3-haiku-20240307', max_tokens: 250, temperature: 0.3, messages: [{ role: 'user', content: prompt }] })
       const text = (msg.content[0] as any)?.text || '{}'
       const parsed = JSON.parse(text)
       if (parsed?.outline?.length) {

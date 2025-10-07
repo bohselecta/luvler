@@ -10,7 +10,7 @@ export async function POST(request: Request) {
       const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
       const prompt = `You are an ABA-informed assistant following BACB ethics: prioritize assent, autonomy, and dignity; avoid coercion or aversives. Generate a short 5-step social pathway for the goal "${title}" using interests ${JSON.stringify(interests)}. Output STRICT JSON: {"steps":[{"order":1,"instruction":"...","tip":"..."}, ...]}.`;
       const msg = await anthropic.messages.create({
-        model: 'claude-3-haiku-20240307',
+        model: process.env.ANTHROPIC_MODEL_HAIKU || 'claude-3-haiku-20240307',
         max_tokens: 300,
         temperature: 0.4,
         messages: [{ role: 'user', content: prompt }]
