@@ -1,9 +1,22 @@
+import { auth } from '@clerk/nextjs/server'
+import { getLimitForTier, incrementUsage, readUsage } from '@/lib/metering'
 import Anthropic from '@anthropic-ai/sdk'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 export async function POST(request: Request) {
   const { slug = 'illustration' } = await request.json().catch(() => ({})) as { slug?: string }
+  try {
+    const a = await auth()
+    if (a.userId) {
+      const tier = 'individual'
+      const limit = getLimitForTier(tier)
+      const usage = await readUsage(a.userId)
+      if (usage.used >= limit) {
+        return new Response(JSON.stringify({ ok: false, error: 'limit_exceeded', limit, used: usage.used }), { status: 429, headers: { 'Content-Type': 'application/json' } })
+      }
+    }
+  } catch {}
   if (process.env.ANTHROPIC_API_KEY) {
     try {
       const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
@@ -12,6 +25,7 @@ export async function POST(request: Request) {
       const text = (msg.content[0] as any)?.text || '{}'
       const parsed = JSON.parse(text)
       if (parsed?.outline?.length) {
+        try { const a = await auth(); if (a.userId) await incrementUsage(a.userId, 1) } catch {}
         return new Response(JSON.stringify({ ok: true, slug, outline: parsed.outline }), { headers: { 'Content-Type': 'application/json' } })
       }
     } catch (_) {}
@@ -23,5 +37,6 @@ export async function POST(request: Request) {
     { id: 'd', title: '1 study with shading' },
     { id: 'e', title: 'Share with 1 friend for feedback' },
   ]
+  try { const a = await auth(); if (a.userId) await incrementUsage(a.userId, 1) } catch {}
   return new Response(JSON.stringify({ ok: true, slug, outline }), { headers: { 'Content-Type': 'application/json' } })
 }
