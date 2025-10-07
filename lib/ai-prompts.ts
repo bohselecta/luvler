@@ -11,6 +11,32 @@ import {
   GoalMode
 } from './types';
 
+// Clinical guardrails and safety constraints (non-diagnostic, ethics-aligned)
+const CLINICAL_BOUNDARIES = `
+Safety & Ethics Rules (follow strictly):
+- Do NOT provide diagnoses, legal, medical, or crisis advice.
+- Do NOT recommend restrictive practices (restraints, seclusion) or aversives.
+- Keep within non-therapeutic guidance unless a licensed professional is involved.
+- Goals must be observable, measurable, functional, and culturally respectful.
+- Use person-first or identity-first language as preferred; never stigmatize.
+- Encourage supervision by a qualified professional for clinical use.
+- Provide supportive, non-coercive strategies; prioritize assent and autonomy.
+`;
+
+const CONTENT_DENYLIST = [
+  'diagnose',
+  'medication dosing',
+  'crisis instructions',
+  'physical restraint',
+  'punishment procedures',
+  'seclusion',
+];
+
+const appendGuardrails = (prompt: string): string => {
+  const deny = CONTENT_DENYLIST.map(k => `- Avoid: ${k}`).join('\n');
+  return `${prompt}\n\n${CLINICAL_BOUNDARIES}\n${deny}\nReturn only the requested fields.`;
+};
+
 // Model selection for cost optimization
 export const selectModel = (taskType: string): string => {
   switch(taskType) {
@@ -62,14 +88,18 @@ For each step:
 
 Use literal language. Be direct and honest. Never be condescending.
 
+Constraints:
+- No medical/diagnostic advice. Keep supportive and optional.
+- Respect autonomy; offer alternatives and sensory accommodations.
+
 Return JSON: [{"id": "step1", "instruction": "Clear action here", "estimatedMinutes": 5, "accommodationTip": "Optional tip"}]`;
 
     // Adjust for text size preference
     if (preferences?.textSize === 'large' || preferences?.textSize === 'xlarge') {
-      return basePrompt + '\n\nUse slightly longer, clearer explanations for each step.';
+      return appendGuardrails(basePrompt + '\n\nUse slightly longer, clearer explanations for each step.');
     }
 
-    return basePrompt;
+    return appendGuardrails(basePrompt);
   },
 
   // Celebration message - target: 100-200 tokens
@@ -83,11 +113,11 @@ Return only the celebration text, no JSON.`;
 
   // Accommodation suggestions - target: 150-250 tokens
   generateAccommodations: (goal: string, context?: string): string => {
-    return `Goal: "${goal}"${context ? `\nContext: ${context}` : ''}
+    return appendGuardrails(`Goal: "${goal}"${context ? `\nContext: ${context}` : ''}
 
 Suggest 3-5 practical accommodations for sensory/cognitive needs. Be specific and actionable.
 
-Return JSON: ["accommodation1", "accommodation2", "accommodation3"]`;
+Return JSON: ["accommodation1", "accommodation2", "accommodation3"]`);
   }
 };
 
@@ -95,7 +125,7 @@ Return JSON: ["accommodation1", "accommodation2", "accommodation3"]`;
 export const CLINICAL_PROMPTS = {
   // SMART goal parsing - target: 600-800 tokens
   parseGoal: (input: GoalInputData, context?: ContextData): string => {
-    return `You are a BCBA creating evidence-based behavioral goals.
+    return appendGuardrails(`You are a BCBA creating evidence-based behavioral goals.
 
 Goal: "${input.rawGoalText}"
 Domain: ${input.domain}
@@ -120,12 +150,12 @@ Include:
 - Behavioral components (antecedents/behavior/consequences)
 - Data collection plan
 
-Return structured JSON matching Goal schema. Be specific, practical, evidence-based.`;
+Return structured JSON matching Goal schema. Be specific, practical, evidence-based.`);
   },
 
   // Task analysis generation - target: 400-600 tokens
   generateTaskAnalysis: (goal: Goal, method: 'forward' | 'backward' | 'total'): string => {
-    return `Generate detailed task analysis for this goal:
+    return appendGuardrails(`Generate detailed task analysis for this goal:
 
 ${goal.parsedGoal.specific}
 
@@ -139,12 +169,12 @@ Each step needs:
 
 Focus on observable, measurable components. Use evidence-based methodology.
 
-Return JSON: [{"stepNumber": 1, "description": "...", "promptingLevel": "independent", "masteryCriterion": "...", "dataCollectionMethod": "..."}]`;
+Return JSON: [{"stepNumber": 1, "description": "...", "promptingLevel": "independent", "masteryCriterion": "...", "dataCollectionMethod": "..."}]`);
   },
 
   // Translation to parent language - target: 300-500 tokens
   translateToParent: (clinicianGoal: Goal): string => {
-    return `Translate this professional goal to supportive parent-child language:
+    return appendGuardrails(`Translate this professional goal to supportive parent-child language:
 
 ${clinicianGoal.clinicianLanguage}
 
@@ -156,12 +186,12 @@ Generate parent-friendly version with:
 5. Sensory considerations
 6. Natural reinforcement ideas
 
-Return JSON: {"parentLanguage": "...", "visualSupports": [...], "homeActivities": [...], "encouragementTips": [...]} `;
+Return JSON: {"parentLanguage": "...", "visualSupports": [...], "homeActivities": [...], "encouragementTips": [...]} `);
   },
 
   // Compliance validation - target: 200-300 tokens
   validateCompliance: (goal: Goal): string => {
-    return `Review this goal for BACB compliance and evidence-based practice:
+    return appendGuardrails(`Review this goal for BACB compliance and evidence-based practice:
 
 Goal: ${goal.parsedGoal.specific}
 
@@ -172,7 +202,7 @@ Check:
 - Cultural responsiveness
 - Functional relevance
 
-Return JSON: {"compliant": true/false, "issues": ["issue1", "issue2"], "suggestions": ["suggestion1"], "citations": ["research1"]}`;
+Return JSON: {"compliant": true/false, "issues": ["issue1", "issue2"], "suggestions": ["suggestion1"], "citations": ["research1"]}`);
   }
 };
 

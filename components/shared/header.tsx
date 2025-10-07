@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { Heart, BookOpen, Home } from 'lucide-react';
 
 interface HeaderProps {
@@ -29,8 +30,8 @@ export function Header({
                 Back to start
               </button>
             )}
-            <div className="bg-gradient-to-br from-primary-500 to-secondary-500 p-3 rounded-2xl">
-              <BookOpen className="w-6 h-6 text-white" />
+            <div className="bg-gradient-to-br from-primary-500 to-secondary-500 p-2 rounded-2xl">
+              <Image src="/logo.png" width={28} height={28} alt="Luvler" />
             </div>
             <div>
               <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100 font-display">
@@ -45,10 +46,8 @@ export function Header({
           <div className="flex items-center gap-4">
             {/* Luvler Logo */}
             <div className="flex items-center gap-2">
-              <Heart className="w-6 h-6 text-primary-500" />
-              <span className="text-lg font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent font-display">
-                Luvler
-              </span>
+              <Image src="/logo.png" width={24} height={24} alt="Luvler" />
+              <span className="text-lg font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent font-display">Luvler</span>
             </div>
           </div>
         </div>
