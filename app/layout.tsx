@@ -6,6 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Footer } from '@/components/shared/footer'
 import Script from 'next/script'
+import { Analytics } from '@/components/shared/analytics'
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
@@ -89,7 +90,7 @@ export default function RootLayout({
           <header className="bg-white/80 dark:bg-gray-900/70 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-40 backdrop-blur">
             <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
               <Link href="/" className="flex items-center gap-2">
-                <Image src="/logo.png" width={28} height={28} alt="Luvler" />
+                <Image src="/logo.png" width={28} height={28} alt="" />
                 <span className="font-bold text-gray-900 dark:text-gray-100">Luvler</span>
               </Link>
               <nav className="flex items-center gap-6 text-sm">
@@ -102,6 +103,7 @@ export default function RootLayout({
 
           <main id="main">
             {children}
+            <Analytics />
           </main>
           <Footer />
         </ThemeProvider>
