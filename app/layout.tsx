@@ -22,23 +22,15 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://luvler.com'),
+  metadataBase: new URL('https://flourishing-crepe-f9591e.netlify.app'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     title: 'Luvler - Love to Learn, Step by Step',
     description: 'An autism-friendly goal setting and self-advocacy tool that helps break down tasks into clear, manageable steps.',
-    url: 'https://luvler.com',
+    url: 'https://flourishing-crepe-f9591e.netlify.app',
     siteName: 'Luvler',
-    images: [
-      {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'Luvler - Love to Learn',
-      },
-    ],
     locale: 'en_US',
     type: 'website',
   },
@@ -46,7 +38,6 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Luvler - Love to Learn, Step by Step',
     description: 'An autism-friendly goal setting and self-advocacy tool that helps break down tasks into clear, manageable steps.',
-    images: ['/og-image.png'],
     creator: '@luvler',
   },
   robots: {
@@ -61,9 +52,8 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon-16x16.png',
-    apple: '/apple-touch-icon.png',
+    icon: '/favicon.svg',
+    apple: '/favicon.svg',
   },
   manifest: '/site.webmanifest',
 }

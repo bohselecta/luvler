@@ -1,15 +1,18 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Heart, BookOpen, Users, Briefcase, ChevronRight, Sparkles } from 'lucide-react';
 
 export default function RouterScreen() {
   const [selectedPath, setSelectedPath] = useState<string | null>(null);
+  const router = useRouter();
 
   const handlePathSelect = (path: 'self-advocacy' | 'professional') => {
     setSelectedPath(path);
-    // In a real app, this would navigate to the appropriate page
     console.log(`Selected path: ${path}`);
+    // Navigate to the selected path
+    router.push(`/${path}`);
   };
 
   return (
