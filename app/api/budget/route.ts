@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 export async function POST(request: Request) {
   const { jars = { needs: 50, fun: 20, learn: 15, give: 5, save: 10 } } = await request.json().catch(() => ({})) as { jars?: Record<string, number> }
   const tips = [

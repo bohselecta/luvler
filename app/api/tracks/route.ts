@@ -1,5 +1,21 @@
+import Anthropic from '@anthropic-ai/sdk'
+
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
 export async function POST(request: Request) {
   const { slug = 'illustration' } = await request.json().catch(() => ({})) as { slug?: string }
+  if (process.env.ANTHROPIC_API_KEY) {
+    try {
+      const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+      const prompt = `Design a concise 5-step learning outline for topic "${slug}". Use plain language and progressive scaffolding. Output JSON: {"outline":[{"id":"a","title":"..."}, ...]}`
+      const msg = await anthropic.messages.create({ model: 'claude-3-haiku-20240307', max_tokens: 250, temperature: 0.3, messages: [{ role: 'user', content: prompt }] })
+      const text = (msg.content[0] as any)?.text || '{}'
+      const parsed = JSON.parse(text)
+      if (parsed?.outline?.length) {
+        return new Response(JSON.stringify({ ok: true, slug, outline: parsed.outline }), { headers: { 'Content-Type': 'application/json' } })
+      }
+    } catch (_) {}
+  }
   const outline = [
     { id: 'a', title: 'Gather 5 references' },
     { id: 'b', title: 'Copy one for line confidence' },
