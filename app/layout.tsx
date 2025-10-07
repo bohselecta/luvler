@@ -2,6 +2,9 @@ import type { Metadata } from 'next'
 import { DM_Sans } from 'next/font/google'
 import '../styles/globals.css'
 import { ThemeProvider } from '@/components/shared/theme-provider'
+import Link from 'next/link'
+import Image from 'next/image'
+import { Footer } from '@/components/shared/footer'
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
@@ -31,6 +34,7 @@ export const metadata: Metadata = {
     description: 'An autism-friendly goal setting and self-advocacy tool that helps break down tasks into clear, manageable steps.',
     url: 'https://flourishing-crepe-f9591e.netlify.app',
     siteName: 'Luvler',
+    images: [{ url: '/og.png' }],
     locale: 'en_US',
     type: 'website',
   },
@@ -39,6 +43,7 @@ export const metadata: Metadata = {
     title: 'Luvler - Love to Learn, Step by Step',
     description: 'An autism-friendly goal setting and self-advocacy tool that helps break down tasks into clear, manageable steps.',
     creator: '@luvler',
+    images: ['/og.png']
   },
   robots: {
     index: true,
@@ -78,7 +83,21 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
+          <header className="bg-white/80 dark:bg-gray-900/70 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-40 backdrop-blur">
+            <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+              <Link href="/" className="flex items-center gap-2">
+                <Image src="/logo.png" width={28} height={28} alt="Luvler" />
+                <span className="font-bold text-gray-900 dark:text-gray-100">Luvler</span>
+              </Link>
+              <nav className="flex items-center gap-6 text-sm">
+                <Link href="/pricing" className="text-gray-700 dark:text-gray-300 hover:underline">Pricing</Link>
+                <Link href="/consent" className="text-gray-700 dark:text-gray-300 hover:underline">Informed Use</Link>
+              </nav>
+            </div>
+          </header>
+
           {children}
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
