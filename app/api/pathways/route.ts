@@ -1,5 +1,6 @@
 import { auth } from '@clerk/nextjs/server'
 import { getLimitForTier, incrementUsage, readUsage } from '@/lib/metering'
+import { resolveTierForUser } from '@/lib/tier'
 import Anthropic from '@anthropic-ai/sdk'
 
 export const runtime = 'nodejs'
@@ -11,7 +12,7 @@ export async function POST(request: Request) {
   try {
     const a = await auth()
     if (a.userId) {
-      const tier = 'individual' // TODO: read from DB/profile
+      const tier = await resolveTierForUser(a.userId)
       const limit = getLimitForTier(tier)
       const usage = await readUsage(a.userId)
       if (usage.used >= limit) {
