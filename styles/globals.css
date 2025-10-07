@@ -11,6 +11,12 @@
   --luvler-blue-light: 140 184 232;
   --luvler-white: 255 255 255;
 
+  /* New neutral palette for stronger contrast */
+  --slate-900: 15 23 42;   /* #0F172A */
+  --slate-800: 30 41 59;   /* #1E293B */
+  --slate-700: 51 65 85;   /* #334155 */
+  --slate-50: 241 245 249; /* #F1F5F9 */
+
   /* Semantic Colors */
   --primary-50: 253 242 248;
   --primary-100: 252 231 243;
@@ -20,8 +26,11 @@
   --warning-500: 245 158 11;
 
   /* Typography */
-  --font-sans: 'DM Sans', 'Inter', system-ui, sans-serif;
-  --font-display: 'DM Sans', 'Inter', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Inter Tight', 'Manrope', sans-serif;
+  --font-serif: 'Crimson Pro', serif;
+  --color-text: 15 23 42;
+  --color-muted: 51 65 85;
 
   /* Spacing */
   --radius-sm: 0.125rem;

@@ -17,17 +17,20 @@ export default function RouterScreen() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-secondary-50 to-accent-50 flex items-center justify-center p-4">
-      <div className="max-w-4xl w-full">
+    <div className="min-h-screen bg-white flex items-center justify-center p-6">
+      <div className="max-w-6xl w-full">
         {/* Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full mb-8 shadow-xl">
-            <Image src="/logo.png" width={56} height={56} alt="" />
+        <div className="mb-16">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Image src="/logo.png" width={40} height={40} alt="" />
+              <span className="sr-only">Luvler</span>
+            </div>
           </div>
-          <h1 className="text-5xl font-bold text-gray-900 mb-6 font-display">
+          <h1 className="mt-10 text-[4.5rem] leading-[1.05] font-bold tracking-[-0.02em] text-slate-900 max-w-4xl">
             Evidence‑based goals with a gentle, autism‑friendly design
           </h1>
-          <p className="text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-4 text-[1.125rem] leading-[1.6] text-slate-700 max-w-2xl">
             Luvler turns everyday goals into clear, step‑by‑step plans—grounded in ABA best practices and written in respectful, plain language for families and clinicians.
           </p>
         </div>
@@ -91,7 +94,7 @@ export default function RouterScreen() {
 
         {/* Features Preview */}
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 border border-gray-200">
-          <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">What makes Luvler special?</h3>
+          <h3 className="text-2xl font-semibold text-slate-900 mb-6 text-center">What makes Luvler special?</h3>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="text-center">
               <div className="bg-primary-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
