@@ -266,3 +266,13 @@ body {
 .luvler-gradient-subtle {
   background: linear-gradient(135deg, rgb(var(--primary-50)) 0%, rgb(var(--secondary-50)) 100%);
 }
+
+/* Hide scrollbar but keep scrolling functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
+}

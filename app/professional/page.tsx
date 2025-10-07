@@ -509,30 +509,30 @@ export default function ProfessionalToolPage() {
     <div className="min-h-screen bg-white dark:bg-gray-900">
       {/* Header */}
       <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 py-5">
-          <div className="flex items-center justify-between gap-6">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between gap-2 md:gap-6">
             {/* Left: Back button */}
             <button
               onClick={() => window.history.back()}
-              className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+              className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors flex-shrink-0"
             >
               <Home className="w-4 h-4" />
-              <span className="hidden sm:inline">Back to start</span>
+              <span className="hidden sm:inline">Back</span>
             </button>
 
             {/* Center: Logo and stage */}
-            <div className="flex items-center gap-3">
-              <div className="bg-primary-500 p-2.5 rounded-xl">
-                <BookOpen className="w-5 h-5 text-white" />
+            <div className="flex items-center gap-2 md:gap-3 min-w-0">
+              <div className="bg-primary-500 p-2 rounded-xl flex-shrink-0">
+                <BookOpen className="w-4 h-4 md:w-5 md:h-5 text-white" />
               </div>
-              <div>
-                <h1 className="text-lg font-bold text-gray-900 dark:text-gray-100">Luvler</h1>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Stage {currentStage + 1} of {stages.length}</p>
+              <div className="min-w-0">
+                <h1 className="text-base md:text-lg font-bold text-gray-900 dark:text-gray-100">Luvler</h1>
+                <p className="text-[10px] md:text-xs text-gray-500 dark:text-gray-400 truncate">Stage {currentStage + 1} of {stages.length}</p>
               </div>
             </div>
 
             {/* Right: Mode Toggle and Demo */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 flex-shrink-0">
               {/* Mode Toggle */}
               <div className="hidden md:flex items-center gap-1 bg-gray-50 dark:bg-gray-700 rounded-xl p-1 border border-gray-200 dark:border-gray-600">
                 <button
@@ -561,7 +561,7 @@ export default function ProfessionalToolPage() {
 
               <button
                 onClick={handleDemo}
-                className="flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-xl transition-all shadow-sm text-xs font-medium"
+                className="flex items-center gap-1.5 px-3 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-xl transition-all shadow-sm text-xs font-medium"
               >
                 <Sparkles className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Demo</span>
@@ -570,9 +570,9 @@ export default function ProfessionalToolPage() {
           </div>
 
           {/* Progress Bar */}
-          <div className="mt-5 flex items-center justify-center gap-2 md:gap-4">
+          <div className="mt-4 flex items-center justify-center gap-1.5 md:gap-4 overflow-x-auto scrollbar-hide">
             {stages.map((stage, index) => (
-              <div key={stage.id} className="flex flex-col items-center flex-1 max-w-[100px]">
+              <div key={stage.id} className="flex flex-col items-center flex-shrink-0 w-[60px] md:w-auto md:flex-1 md:max-w-[100px]">
                 <div className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center transition-all ${
                   index < currentStage
                     ? 'bg-green-500 text-white'
@@ -586,7 +586,7 @@ export default function ProfessionalToolPage() {
                     React.createElement(stage.icon, { className: 'w-4 h-4 md:w-5 md:h-5' })
                   )}
                 </div>
-                <span className={`text-[10px] md:text-xs mt-1.5 font-medium text-center hidden sm:block ${
+                <span className={`text-[9px] md:text-xs mt-1 font-medium text-center hidden sm:block ${
                   index === currentStage ? 'text-primary-600' : 'text-gray-500 dark:text-gray-400'
                 }`}>
                   {stage.name}
