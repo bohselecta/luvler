@@ -21,12 +21,6 @@ export default function RouterScreen() {
       <div className="max-w-[1280px] w-full px-4 md:px-8">
         {/* Header */}
         <div className="mb-16">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Image src="/logo.png" width={40} height={40} alt="" />
-              <span className="sr-only">Luvler</span>
-            </div>
-          </div>
           <h1 className="mt-10 text-[4.5rem] leading-[1.05] font-bold tracking-[-0.02em] text-slate-900 max-w-4xl">
             Evidence‑based goals with a gentle, autism‑friendly design
           </h1>
