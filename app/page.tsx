@@ -21,10 +21,10 @@ export default function RouterScreen() {
       <div className="max-w-[1280px] w-full px-4 md:px-8">
         {/* Header */}
         <div className="mb-16">
-          <h1 className="mt-10 text-[3.5rem] md:text-[4rem] leading-[1.1] font-semibold tracking-tight text-slate-900 max-w-4xl font-display">
+          <h1 className="mt-6 md:mt-10 text-[2.5rem] sm:text-[3rem] md:text-[4rem] leading-[1.1] font-semibold tracking-tight text-slate-900 max-w-4xl font-display">
             Evidence‑based goals with a gentle, autism‑friendly design
           </h1>
-          <p className="mt-6 text-[22px] leading-[1.7] font-normal text-slate-600 max-w-[48ch] font-serif">
+          <p className="mt-4 md:mt-6 text-lg md:text-[22px] leading-[1.7] font-normal text-slate-600 max-w-[48ch] font-serif">
             Luvler turns everyday goals into clear, step‑by‑step plans—grounded in ABA best practices and written in respectful, plain language for families and clinicians.
           </p>
         </div>
