@@ -36,21 +36,21 @@ export default function RouterScreen() {
             onClick={() => handlePathSelect('self-advocacy')}
             className="group w-full bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-8 text-left border border-gray-100 hover:border-primary-200 md:col-span-6"
           >
-            <div className="flex items-center gap-6">
-              <div className="bg-gradient-to-br from-primary-100 to-primary-200 p-4 rounded-2xl group-hover:scale-105 transition-transform">
+            <div className="flex items-start gap-6">
+              <div className="bg-gradient-to-br from-primary-100 to-primary-200 p-4 rounded-2xl group-hover:scale-105 transition-transform flex-shrink-0">
                 <Heart className="w-10 h-10 text-primary-600" />
               </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-3 mb-2">
-                  <h2 className="text-2xl font-semibold text-gray-900">I am on the autism spectrum</h2>
-                  <div className="bg-primary-100 text-primary-700 px-3 py-1 rounded-full text-sm font-medium">
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-3">
+                  <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">I am on the autism spectrum</h2>
+                  <div className="bg-primary-100 text-primary-700 px-3 py-1 rounded-full text-sm font-medium self-start sm:self-center">
                     Self-Advocacy
                   </div>
                 </div>
-                <p className="text-slate-600 text-[1rem] leading-[1.6] font-serif">
+                <p className="text-slate-600 text-[1rem] leading-[1.6] font-serif mb-6">
                   Get help breaking down tasks into clear, manageable steps you can follow at your own pace.
                 </p>
-                <div className="mt-4 flex items-center gap-2 text-primary-600 font-medium">
+                <div className="flex items-center gap-2 text-primary-600 font-medium group-hover:text-primary-700 transition-colors">
                   <span>Create my step‑by‑step plan</span>
                   <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </div>
@@ -63,21 +63,21 @@ export default function RouterScreen() {
             onClick={() => handlePathSelect('professional')}
             className="group w-full bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-8 text-left border border-gray-100 hover:border-secondary-200 md:col-span-6"
           >
-            <div className="flex items-center gap-6">
-              <div className="bg-gradient-to-br from-secondary-100 to-secondary-200 p-4 rounded-2xl group-hover:scale-105 transition-transform">
+            <div className="flex items-start gap-6">
+              <div className="bg-gradient-to-br from-secondary-100 to-secondary-200 p-4 rounded-2xl group-hover:scale-105 transition-transform flex-shrink-0">
                 <Users className="w-10 h-10 text-secondary-600" />
               </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-3 mb-2">
-                  <h2 className="text-2xl font-semibold text-gray-900">I'm a clinician or caregiver</h2>
-                  <div className="bg-secondary-100 text-secondary-700 px-3 py-1 rounded-full text-sm font-medium">
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-3">
+                  <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">I'm a clinician or caregiver</h2>
+                  <div className="bg-secondary-100 text-secondary-700 px-3 py-1 rounded-full text-sm font-medium self-start sm:self-center">
                     Professional
                   </div>
                 </div>
-                <p className="text-slate-600 text-[1rem] leading-[1.6] font-serif">
+                <p className="text-slate-600 text-[1rem] leading-[1.6] font-serif mb-6">
                   Access comprehensive ABA tools for clinicians and parents with evidence-based goal setting and progress tracking.
                 </p>
-                <div className="mt-4 flex items-center gap-2 text-secondary-600 font-medium">
+                <div className="flex items-center gap-2 text-secondary-600 font-medium group-hover:text-secondary-700 transition-colors">
                   <span>Build a research‑backed plan</span>
                   <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </div>
