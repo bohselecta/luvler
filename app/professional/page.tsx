@@ -527,7 +527,7 @@ export default function ProfessionalToolPage() {
               </div>
               <div className="min-w-0">
                 <h1 className="text-base md:text-lg font-bold text-gray-900 dark:text-gray-100">Luvler</h1>
-                <p className="text-[10px] md:text-xs text-gray-500 dark:text-gray-400 truncate">Stage {currentStage + 1} of {stages.length}</p>
+                {/* Removed redundant stage counter */}
               </div>
             </div>
 

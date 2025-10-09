@@ -86,9 +86,7 @@ export function ProgressHeader({
               <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100 font-display">
                 ABA Goal Setting Tool
               </h1>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Stage {currentStage + 1} of {totalStages}: {stageName}
-              </p>
+              {/* Removed redundant stage counter; icon-only stepper remains elsewhere */}
             </div>
           </div>
 
