@@ -2,8 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Shield, Eye, EyeOff, Download, Trash2, ArrowLeft, Lock, Users, User, Database } from 'lucide-react';
-import { PrivacySettings } from '@/lib/types';
+import { Shield, Eye, EyeOff, Download, Trash2, ArrowLeft, Lock, Users, User, Database, Settings, FileText } from 'lucide-react';
+import { PrivacySettings, ClinicalDataSharing } from '@/lib/types';
+import { getPrivacySettings, updatePrivacySettings, getClinicalDataSharings, exportUserData, deleteUserData } from '@/lib/privacy';
+import { getAuditLog } from '@/lib/audit';
+import { ConsentFlow } from '@/components/shared/ConsentFlow';
 
 export default function PrivacyPage() {
   const router = useRouter();
@@ -13,35 +16,104 @@ export default function PrivacyPage() {
     shareForResearch: false,
     lastUpdated: new Date()
   });
+  const [sharings, setSharings] = useState<ClinicalDataSharing[]>([]);
+  const [auditLogs, setAuditLogs] = useState<any[]>([]);
+  const [showConsentFlow, setShowConsentFlow] = useState(false);
+  const [selectedClinician, setSelectedClinician] = useState<{id: string, name: string} | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Load settings from localStorage (demo - would be API)
+  // Load privacy data
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('luvler_privacy_settings');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        setSettings({
-          ...parsed,
-          lastUpdated: parsed.lastUpdated ? new Date(parsed.lastUpdated) : new Date()
-        });
-      }
-    } catch (error) {
-      console.warn('Error loading privacy settings:', error);
-    }
+    loadPrivacyData();
   }, []);
 
-  const saveSettings = (updatedSettings: PrivacySettings) => {
-    const newSettings = { ...updatedSettings, lastUpdated: new Date() };
+  const loadPrivacyData = async () => {
     try {
-      localStorage.setItem('luvler_privacy_settings', JSON.stringify(newSettings));
-      setSettings(newSettings);
+      setLoading(true);
+      const [privacySettings, clinicalSharings, auditData] = await Promise.all([
+        getPrivacySettings('demo-user'), // In real app, get from auth
+        getClinicalDataSharings('demo-user'),
+        getAuditLog('demo-user', 30)
+      ]);
+
+      setSettings(privacySettings);
+      setSharings(clinicalSharings);
+      setAuditLogs(auditData);
     } catch (error) {
-      console.warn('Error saving privacy settings:', error);
+      console.warn('Error loading privacy data:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const updateSetting = (key: keyof PrivacySettings, value: any) => {
-    saveSettings({ ...settings, [key]: value });
+  const handleUpdateSetting = async (key: keyof PrivacySettings, value: any) => {
+    try {
+      const updated = await updatePrivacySettings('demo-user', { [key]: value });
+      setSettings(updated);
+    } catch (error) {
+      console.warn('Error updating privacy setting:', error);
+      alert('Failed to update setting. Please try again.');
+    }
+  };
+
+  const handleGrantAccess = async (
+    clinicianId: string,
+    accessLevel: 'summary' | 'full',
+    sharedDataTypes: ('goals' | 'progress' | 'reflections')[],
+    expiresAt?: Date
+  ) => {
+    try {
+      await import('@/lib/privacy').then(({ grantClinicalDataAccess }) =>
+        grantClinicalDataAccess('demo-user', clinicianId, accessLevel, sharedDataTypes, expiresAt)
+      );
+      await loadPrivacyData(); // Refresh data
+    } catch (error) {
+      console.error('Error granting access:', error);
+      throw error;
+    }
+  };
+
+  const handleRevokeAccess = async (clinicianId: string) => {
+    try {
+      await import('@/lib/privacy').then(({ revokeClinicalDataAccess }) =>
+        revokeClinicalDataAccess('demo-user', clinicianId)
+      );
+      await loadPrivacyData(); // Refresh data
+    } catch (error) {
+      console.error('Error revoking access:', error);
+      throw error;
+    }
+  };
+
+  const handleExportData = async () => {
+    try {
+      const data = await exportUserData('demo-user');
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `luvler-data-export-${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error exporting data:', error);
+      alert('Failed to export data. Please try again.');
+    }
+  };
+
+  const handleDeleteData = async () => {
+    if (!confirm('Are you sure you want to permanently delete all your data? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      await deleteUserData('demo-user');
+      alert('Your data has been deleted. You will be redirected.');
+      router.push('/');
+    } catch (error) {
+      console.error('Error deleting data:', error);
+      alert('Failed to delete data. Please contact support.');
+    }
   };
 
   const dataSections = [
@@ -184,7 +256,7 @@ export default function PrivacyPage() {
                     <input
                       type="checkbox"
                       checked={settings.shareWithClinician || false}
-                      onChange={e => updateSetting('shareWithClinician', e.target.checked)}
+                      onChange={e => handleUpdateSetting('shareWithClinician', e.target.checked)}
                       className="rounded"
                     />
                     <span className="text-sm font-medium">Enable clinician sharing</span>
@@ -192,45 +264,44 @@ export default function PrivacyPage() {
 
                   {settings.shareWithClinician && (
                     <div className="ml-6 space-y-3">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Clinician ID
-                        </label>
-                        <input
-                          value={settings.clinicianId || ''}
-                          onChange={e => updateSetting('clinicianId', e.target.value)}
-                          placeholder="Enter clinician identifier"
-                          className="luvler-input"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Access Level
-                        </label>
+                      {sharings.length > 0 ? (
                         <div className="space-y-2">
-                          <label className="flex items-center gap-2">
-                            <input
-                              type="radio"
-                              name="clinicianAccess"
-                              value="summary"
-                              checked={settings.clinicianAccessLevel === 'summary'}
-                              onChange={e => updateSetting('clinicianAccessLevel', 'summary')}
-                            />
-                            <span className="text-sm">Summary only (progress without details)</span>
-                          </label>
-                          <label className="flex items-center gap-2">
-                            <input
-                              type="radio"
-                              name="clinicianAccess"
-                              value="full"
-                              checked={settings.clinicianAccessLevel === 'full'}
-                              onChange={e => updateSetting('clinicianAccessLevel', 'full')}
-                            />
-                            <span className="text-sm">Full access (goals, steps, reflections)</span>
-                          </label>
+                          {sharings.map(sharing => (
+                            <div key={sharing.clinicianId} className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                              <div className="flex items-center justify-between">
+                                <div>
+                                  <p className="text-sm font-medium text-green-900">
+                                    Clinician {sharing.clinicianId}
+                                  </p>
+                                  <p className="text-xs text-green-700">
+                                    {sharing.accessLevel} access • Granted {sharing.grantedAt.toLocaleDateString()}
+                                    {sharing.expiresAt && ` • Expires ${sharing.expiresAt.toLocaleDateString()}`}
+                                  </p>
+                                </div>
+                                <button
+                                  onClick={() => {
+                                    setSelectedClinician({ id: sharing.clinicianId, name: `Clinician ${sharing.clinicianId}` });
+                                    setShowConsentFlow(true);
+                                  }}
+                                  className="text-xs text-green-700 hover:text-green-900 underline"
+                                >
+                                  Manage
+                                </button>
+                              </div>
+                            </div>
+                          ))}
                         </div>
-                      </div>
+                      ) : (
+                        <button
+                          onClick={() => {
+                            setSelectedClinician({ id: 'demo-clinician', name: 'Demo Clinician' });
+                            setShowConsentFlow(true);
+                          }}
+                          className="w-full bg-primary-500 text-white px-4 py-2 rounded-xl hover:bg-primary-600 transition-colors"
+                        >
+                          Set Up Clinician Access
+                        </button>
+                      )}
                     </div>
                   )}
                 </div>
@@ -254,7 +325,7 @@ export default function PrivacyPage() {
                   <input
                     type="checkbox"
                     checked={settings.shareWithParent || false}
-                    onChange={e => updateSetting('shareWithParent', e.target.checked)}
+                    onChange={e => handleUpdateSetting('shareWithParent', e.target.checked)}
                     className="rounded"
                   />
                   <span className="text-sm font-medium">Enable parent summary access</span>
@@ -280,7 +351,7 @@ export default function PrivacyPage() {
                   <input
                     type="checkbox"
                     checked={settings.shareForResearch || false}
-                    onChange={e => updateSetting('shareForResearch', e.target.checked)}
+                    onChange={e => handleUpdateSetting('shareForResearch', e.target.checked)}
                     className="rounded"
                   />
                   <span className="text-sm font-medium">Share anonymized research data</span>
@@ -296,7 +367,10 @@ export default function PrivacyPage() {
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Manage Your Data</h2>
 
         <div className="grid md:grid-cols-2 gap-4">
-          <button className="flex items-center gap-3 p-4 border border-gray-200 rounded-xl hover:border-primary-300 hover:bg-primary-50 transition-colors">
+          <button
+            onClick={handleExportData}
+            className="flex items-center gap-3 p-4 border border-gray-200 rounded-xl hover:border-primary-300 hover:bg-primary-50 transition-colors"
+          >
             <Download className="w-5 h-5 text-primary-600" />
             <div className="text-left">
               <div className="font-medium text-gray-900">Download My Data</div>
@@ -304,7 +378,10 @@ export default function PrivacyPage() {
             </div>
           </button>
 
-          <button className="flex items-center gap-3 p-4 border border-red-200 rounded-xl hover:border-red-300 hover:bg-red-50 transition-colors">
+          <button
+            onClick={handleDeleteData}
+            className="flex items-center gap-3 p-4 border border-red-200 rounded-xl hover:border-red-300 hover:bg-red-50 transition-colors"
+          >
             <Trash2 className="w-5 h-5 text-red-600" />
             <div className="text-left">
               <div className="font-medium text-gray-900">Delete My Data</div>
@@ -334,6 +411,22 @@ export default function PrivacyPage() {
           </div>
         </div>
       </div>
+
+      {/* Consent Flow Modal */}
+      {showConsentFlow && selectedClinician && (
+        <ConsentFlow
+          clinicianName={selectedClinician.name}
+          clinicianId={selectedClinician.id}
+          userId="demo-user"
+          onGrantAccess={handleGrantAccess}
+          onRevokeAccess={handleRevokeAccess}
+          onClose={() => {
+            setShowConsentFlow(false);
+            setSelectedClinician(null);
+          }}
+          existingSharing={sharings.find(s => s.clinicianId === selectedClinician.id)}
+        />
+      )}
     </div>
   );
 }
