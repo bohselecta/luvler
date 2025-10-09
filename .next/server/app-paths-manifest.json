@@ -1,13 +1,9 @@
 {
   "/page": "app/page.js",
-  "/professional/page": "app/professional/page.js",
-  "/api/log-client/route": "app/api/log-client/route.js",
   "/api/pathways/route": "app/api/pathways/route.js",
-  "/api/tracks/route": "app/api/tracks/route.js",
-  "/pricing/page": "app/pricing/page.js",
-  "/api/create-checkout/route": "app/api/create-checkout/route.js",
+  "/api/log-client/route": "app/api/log-client/route.js",
+  "/companion/page": "app/companion/page.js",
+  "/companion/friends/explore/page": "app/companion/friends/explore/page.js",
   "/companion/friends/meetups/page": "app/companion/friends/meetups/page.js",
-  "/companion/friends/practice/page": "app/companion/friends/practice/page.js",
-  "/companion/rewards/page": "app/companion/rewards/page.js",
-  "/companion/page": "app/companion/page.js"
+  "/companion/friends/page": "app/companion/friends/page.js"
 }
