@@ -38,7 +38,7 @@ export default function RouterScreen() {
             aria-label="Start Companion"
           >
             <picture>
-              <source srcSet="/hero-companion.png" type="image/png" />
+              <source srcSet="/hero-companion@2x.png" type="image/png" />
               <img src="/hero-companion.svg" alt="Companion hero placeholder" className="w-full h-[220px] object-cover" />
             </picture>
             <div className="p-8">
@@ -58,7 +58,7 @@ export default function RouterScreen() {
             aria-label="See clinician tools"
           >
             <picture>
-              <source srcSet="/hero-clinician.png" type="image/png" />
+              <source srcSet="/hero-clinician@2x.png" type="image/png" />
               <img src="/hero-clinician.svg" alt="Clinician hero placeholder" className="w-full h-[220px] object-cover" />
             </picture>
             <div className="p-8">
@@ -113,7 +113,7 @@ export default function RouterScreen() {
             </div>
             <div>
               <picture>
-                <source srcSet="/preview-companion-desktop.png" type="image/png" />
+                <source srcSet="/preview-companion-desktop@2x.png" type="image/png" />
                 <img src="/preview-companion-desktop.svg" alt="Companion dashboard preview placeholder" className="w-full rounded-xl border border-gray-200" />
               </picture>
             </div>
@@ -135,7 +135,7 @@ export default function RouterScreen() {
             </div>
             <div>
               <picture>
-                <source srcSet="/preview-clinician-goal.png" type="image/png" />
+                <source srcSet="/preview-clinician-goal@2x.png" type="image/png" />
                 <img src="/preview-clinician-goal.svg" alt="Clinician goal editor preview placeholder" className="w-full rounded-xl border border-gray-200" />
               </picture>
             </div>
