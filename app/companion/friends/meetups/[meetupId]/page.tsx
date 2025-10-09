@@ -426,10 +426,10 @@ export default function MeetupRoomPage() {
                   <span className="text-sm text-gray-800">{item.title}</span>
                   <div className="flex gap-2 text-xs">
                     {isHost && item.status !== 'active' && (
-                      <button onClick={() => { const next = agenda.map(a => a.id===item.id?{...a,status:'active'}:a); setAgenda(next); persist('agenda', next); }} className="px-2 py-1 rounded bg-blue-100 text-blue-700">Start</button>
+                      <button onClick={() => { const next: MeetupAgendaItem[] = agenda.map(a => (a.id===item.id?{...a,status:'active' as const}:a)); setAgenda(next); persist('agenda', next); }} className="px-2 py-1 rounded bg-blue-100 text-blue-700">Start</button>
                     )}
                     {isHost && item.status !== 'done' && (
-                      <button onClick={() => { const next = agenda.map(a => a.id===item.id?{...a,status:'done'}:a); setAgenda(next); persist('agenda', next); }} className="px-2 py-1 rounded bg-green-100 text-green-700">Done</button>
+                      <button onClick={() => { const next: MeetupAgendaItem[] = agenda.map(a => (a.id===item.id?{...a,status:'done' as const}:a)); setAgenda(next); persist('agenda', next); }} className="px-2 py-1 rounded bg-green-100 text-green-700">Done</button>
                     )}
                     {isHost && (
                       <button onClick={() => { const next = agenda.filter(a => a.id!==item.id); setAgenda(next); persist('agenda', next); }} className="px-2 py-1 rounded bg-gray-100 text-gray-700">Remove</button>
