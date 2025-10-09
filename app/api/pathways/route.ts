@@ -2,6 +2,8 @@ import { auth } from '@clerk/nextjs/server'
 import { getLimitForTier, incrementUsage, readUsage } from '@/lib/metering'
 import { resolveTierForUser } from '@/lib/tier'
 import Anthropic from '@anthropic-ai/sdk'
+import { buildFriendshipPathwayPrompt } from '@/lib/ai-prompts'
+import { getProcessingModalities, getSpecialInterests } from '@/lib/personalization'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -57,22 +59,23 @@ export async function POST(request: Request) {
 
   if (process.env.ANTHROPIC_API_KEY) {
     try {
+      // Get user's personalization context
+      let userContext;
+      try {
+        const a = await auth();
+        if (a.userId) {
+          const modalities = getProcessingModalities();
+          const interests = getSpecialInterests();
+          userContext = {
+            processingModalities: modalities,
+            specialInterests: interests,
+            taskType: 'friendship' as const
+          };
+        }
+      } catch {}
+
       const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
-      const prompt = `You are an ABA-informed assistant following BACB ethics: prioritize assent, autonomy, and dignity; avoid coercion or aversives.
-
-Generate a comprehensive 4-phase friendship pathway for the goal "${title}" using interests ${JSON.stringify(interests)}.
-
-The 4 phases are:
-1. understanding - Explore what friendship means personally (2-3 steps)
-2. practice - Build skills through safe exercises (3-4 steps)
-3. opportunities - Find structured social connections (2-3 steps)
-4. confidence - Track progress and celebrate growth (2-3 steps)
-
-${personalizationContext}
-
-${includeContextualReasons ? 'For each step, include a contextualReason field explaining why this step matters in the immediate context (not the full roadmap).' : ''}
-
-Output STRICT JSON: {"steps":[{"id":"unique_id","order":1,"phase":"understanding","instruction":"Clear instruction","tip":"Optional helpful tip"${includeContextualReasons ? ',"contextualReason":"Why this matters now"' : ''}}, ...]}.`;
+      const prompt = buildFriendshipPathwayPrompt(title, interests, userContext);
 
       const msg = await anthropic.messages.create({
         model: process.env.ANTHROPIC_MODEL_HAIKU || 'claude-3-haiku-20240307',
