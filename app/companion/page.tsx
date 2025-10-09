@@ -1,8 +1,6 @@
 "use client";
 import { FriendshipPlanner } from '@/components/companion/FriendshipPlanner'
 import { EnergyMeter } from '@/components/companion/EnergyMeter'
-import { BudgetJars } from '@/components/companion/BudgetJars'
-import { TrackMap } from '@/components/companion/TrackMap'
 import { Heart, Target, Users } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -113,15 +111,14 @@ export default function CompanionPage() {
       </div>
 
       {/* Tools Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         <EnergyMeter />
         <FriendshipPlanner
           defaultTitle={defaults?.goal || 'Say hello'}
           defaultInterests={defaults?.interests || ['drawing']}
           autoGenerate={true}
         />
-        <BudgetJars />
-        <TrackMap defaultSlug={(defaults?.interests && defaults.interests.includes('illustration')) ? 'illustration' : 'general'} autoLoad={true} />
+        {/* Removed Budget Jars and Track Map per request */}
       </div>
     </div>
   )
