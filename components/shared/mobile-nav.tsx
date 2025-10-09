@@ -25,8 +25,10 @@ export function MobileNav() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6 text-sm">
             <Link href="/companion" className="text-gray-700 dark:text-gray-300 hover:underline">Companion</Link>
+            <a href="https://www.autismspeaks.org/" target="_blank" rel="noopener noreferrer" className="text-gray-700 dark:text-gray-300 hover:underline">Learn</a>
             <Link href="/clients" className="text-gray-700 dark:text-gray-300 hover:underline">Clients</Link>
             <Link href="/pricing" className="text-gray-700 dark:text-gray-300 hover:underline">Pricing</Link>
+            <Link href="/about" className="text-gray-700 dark:text-gray-300 hover:underline">About</Link>
             <Link href="/consent" className="text-gray-700 dark:text-gray-300 hover:underline">Informed Use</Link>
             <Link href="/privacy" className="text-gray-700 dark:text-gray-300 hover:underline">Privacy</Link>
             <Link href="/login" className="text-gray-700 dark:text-gray-300 hover:underline">Sign in</Link>
@@ -38,7 +40,6 @@ export function MobileNav() {
             onClick={toggleMenu}
             className="md:hidden p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
             aria-label={isOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={isOpen}
             aria-controls="mobile-menu"
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -55,6 +56,22 @@ export function MobileNav() {
                 onClick={closeMenu}
               >
                 Companion
+              </Link>
+              <a
+                href="https://www.autismspeaks.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 py-2 text-base transition-colors"
+                onClick={closeMenu}
+              >
+                Learn
+              </a>
+              <Link
+                href="/about"
+                className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 py-2 text-base transition-colors"
+                onClick={closeMenu}
+              >
+                About
               </Link>
               <Link
                 href="/clients"

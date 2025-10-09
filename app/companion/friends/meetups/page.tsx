@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Plus, Users, Calendar, Clock, Search, Filter, Heart } from 'lucide-react';
-import { VirtualMeetup, MeetupTemplate } from '@/lib/types';
+import { VirtualMeetup, MeetupTemplate, MeetupSettings } from '@/lib/types';
+import SensitivityDials from '@/components/companion/SensitivityDials';
 import { getCommunityPreference } from '@/lib/personalization';
 
 export default function MeetupsPage() {
@@ -216,6 +217,7 @@ export default function MeetupsPage() {
             onChange={(e) => setNeurotypeFilter(e.target.value as any)}
             className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             title="Neurotype filter"
+            aria-label="Neurotype filter"
           >
             <option value="autistic-only">Autistic-only (safer, shared understanding)</option>
             <option value="mixed">Mixed neurotype</option>
@@ -225,6 +227,8 @@ export default function MeetupsPage() {
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value as 'all' | 'scheduled' | 'active')}
             className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            title="Status filter"
+            aria-label="Status filter"
           >
             <option value="all">All Meetups</option>
             <option value="scheduled">Scheduled</option>
@@ -400,6 +404,15 @@ function CreateMeetupModal({ templates, onClose, onCreated }: {
     duration: 60
   });
   const [loading, setLoading] = useState(false);
+  const [settings, setSettings] = useState<MeetupSettings>({
+    audioOnly: false,
+    textChatEnabled: true,
+    structuredTurns: true,
+    maxParticipants: 8,
+    duration: 45,
+    recordingEnabled: false,
+    breakoutRooms: false
+  })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -409,7 +422,7 @@ function CreateMeetupModal({ templates, onClose, onCreated }: {
       const response = await fetch('/api/meetups/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({ ...formData, settings })
       });
 
       const data = await response.json();
@@ -489,10 +502,12 @@ function CreateMeetupModal({ templates, onClose, onCreated }: {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Meetup Template *
               </label>
-              <select
+                <select
                 value={formData.templateId}
                 onChange={(e) => setFormData({ ...formData, templateId: e.target.value })}
-                className="luvler-input w-full"
+                  className="luvler-input w-full"
+                  title="Template"
+                  aria-label="Template"
                 required
               >
                 <option value="">Choose a template...</option>
@@ -517,6 +532,7 @@ function CreateMeetupModal({ templates, onClose, onCreated }: {
                   value={formData.scheduledFor}
                   onChange={(e) => setFormData({ ...formData, scheduledFor: e.target.value })}
                   className="luvler-input w-full"
+                  title="Date and time"
                   required
                 />
               </div>
@@ -529,6 +545,7 @@ function CreateMeetupModal({ templates, onClose, onCreated }: {
                   value={formData.duration}
                   onChange={(e) => setFormData({ ...formData, duration: parseInt(e.target.value) })}
                   className="luvler-input w-full"
+                  title="Duration"
                 >
                   <option value={30}>30 minutes</option>
                   <option value={45}>45 minutes</option>
@@ -546,10 +563,18 @@ function CreateMeetupModal({ templates, onClose, onCreated }: {
               value={formData.neurotype}
               onChange={(e) => setFormData({ ...formData, neurotype: e.target.value as any })}
               className="luvler-input w-full"
+              title="Room type"
             >
               <option value="autistic-only">Autistic-only (recommended)</option>
               <option value="mixed">Mixed neurotype</option>
             </select>
+          </div>
+
+          {/* Sensitivity / Accessibility */}
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Accessibility & Sensitivity</h3>
+            <p className="text-sm text-gray-600 mb-3">Configure options to reduce sensory load and keep turns clear.</p>
+            <SensitivityDials value={settings} onChange={setSettings} />
           </div>
 
             <div className="flex gap-3 pt-4">

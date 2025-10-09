@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
 import { ArrowLeft, Users, Calendar, Clock, Settings, Heart, MessageCircle, Mic, MicOff } from 'lucide-react';
-import { VirtualMeetup, MeetupSettings } from '@/lib/types';
+import SensitivityDials from '@/components/companion/SensitivityDials';
+import { VirtualMeetup, MeetupSettings, MeetupAgendaItem, MeetupBoardNote, MeetupGalleryItem, MeetupResourceLink } from '@/lib/types';
 import { logClientEvent } from '@/components/shared/analytics';
 
 export default function MeetupRoomPage() {
@@ -17,10 +18,64 @@ export default function MeetupRoomPage() {
   const [error, setError] = useState<string | null>(null);
   const [personalGoals, setPersonalGoals] = useState<string[]>(['']);
   const [isJoined, setIsJoined] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState<string>('');
+
+  // Co-op UI state (MVP stored in localStorage)
+  const [agenda, setAgenda] = useState<MeetupAgendaItem[]>([]);
+  const [turnQueue, setTurnQueue] = useState<string[]>([]);
+  const [boardNotes, setBoardNotes] = useState<MeetupBoardNote[]>([]);
+  const [gallery, setGallery] = useState<MeetupGalleryItem[]>([]);
+  const [resources, setResources] = useState<MeetupResourceLink[]>([]);
 
   useEffect(() => {
+    // simple per-visit id
+    try {
+      const sid = sessionStorage.getItem('luvler_uid') || `visitor_${Math.random().toString(36).slice(2)}`;
+      sessionStorage.setItem('luvler_uid', sid);
+      setCurrentUserId(sid);
+    } catch {}
     fetchMeetup();
+    // load coop state
+    try {
+      const a = localStorage.getItem(`luvler_meetup_${meetupId}_agenda`);
+      if (a) setAgenda(JSON.parse(a).map((x: any) => ({ ...x, createdAt: x.createdAt ? new Date(x.createdAt) : undefined })));
+      const q = localStorage.getItem(`luvler_meetup_${meetupId}_queue`);
+      if (q) setTurnQueue(JSON.parse(q));
+      const b = localStorage.getItem(`luvler_meetup_${meetupId}_board`);
+      if (b) setBoardNotes(JSON.parse(b).map((x: any) => ({ ...x, createdAt: new Date(x.createdAt) })));
+      const g = localStorage.getItem(`luvler_meetup_${meetupId}_gallery`);
+      if (g) setGallery(JSON.parse(g).map((x: any) => ({ ...x, createdAt: new Date(x.createdAt) })));
+      const r = localStorage.getItem(`luvler_meetup_${meetupId}_resources`);
+      if (r) setResources(JSON.parse(r).map((x: any) => ({ ...x, createdAt: new Date(x.createdAt) })));
+    } catch {}
+
+    // BroadcastChannel realtime (MVP fallback)
+    let ch: BroadcastChannel | null = null
+    try {
+      ch = new BroadcastChannel(`meetup_${meetupId}`)
+      ch.onmessage = (ev) => {
+        const { type, payload } = ev.data || {}
+        if (type === 'agenda') setAgenda(payload)
+        if (type === 'queue') setTurnQueue(payload)
+        if (type === 'board') setBoardNotes(payload)
+        if (type === 'gallery') setGallery(payload)
+        if (type === 'resources') setResources(payload)
+      }
+    } catch {}
+
+    return () => {
+      try { ch && ch.close() } catch {}
+    }
   }, [meetupId]);
+
+  const persist = (key: string, value: any) => {
+    try { localStorage.setItem(`luvler_meetup_${meetupId}_${key}`, JSON.stringify(value)); } catch {}
+    try {
+      const ch = new BroadcastChannel(`meetup_${meetupId}`);
+      ch.postMessage({ type: key, payload: value });
+      ch.close();
+    } catch {}
+  }
 
   const fetchMeetup = async () => {
     try {
@@ -114,7 +169,7 @@ export default function MeetupRoomPage() {
     );
   }
 
-  const isHost = false; // In a real app, check if current user is the host
+  const isHost = meetup.hostId === currentUserId;
   const canJoin = meetup.status === 'scheduled' && meetup.participants.length < meetup.settings.maxParticipants;
 
   return (
@@ -208,6 +263,11 @@ export default function MeetupRoomPage() {
           <p className="text-sm text-blue-800 mt-1">
             This meetup is designed around shared interests to help build natural connections.
           </p>
+        </div>
+
+        {/* Read-only sensitivity dials for quick scan */}
+        <div className="mt-4">
+          <SensitivityDials value={meetup.settings} readOnly />
         </div>
       </div>
 
@@ -334,6 +394,187 @@ export default function MeetupRoomPage() {
             {meetup.settings.maxParticipants - meetup.participants.length} spot{meetup.settings.maxParticipants - meetup.participants.length !== 1 ? 's' : ''} still available
           </p>
         )}
+      </div>
+
+      {/* Co-op: Agenda & Turn Queue */}
+      <div className="luvler-card mt-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">Agenda & Turns</h2>
+        <div className="grid md:grid-cols-2 gap-6">
+          <div>
+            <h3 className="font-medium text-gray-900 mb-2">Agenda</h3>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const form = e.target as HTMLFormElement;
+                const input = (form.elements.namedItem('agendaTitle') as HTMLInputElement);
+                const title = input.value.trim();
+                if (!title) return;
+                const item: MeetupAgendaItem = { id: `ai_${Date.now()}`, title, status: 'pending' };
+                const next = [...agenda, item];
+                setAgenda(next);
+                persist('agenda', next);
+                input.value = '';
+              }}
+              className="flex gap-2 mb-3"
+            >
+              <input name="agendaTitle" placeholder="Add agenda item" className="luvler-input flex-1" />
+              <button className="luvler-button-primary">Add</button>
+            </form>
+            <ul className="space-y-2">
+              {agenda.map(item => (
+                <li key={item.id} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
+                  <span className="text-sm text-gray-800">{item.title}</span>
+                  <div className="flex gap-2 text-xs">
+                    {isHost && item.status !== 'active' && (
+                      <button onClick={() => { const next = agenda.map(a => a.id===item.id?{...a,status:'active'}:a); setAgenda(next); persist('agenda', next); }} className="px-2 py-1 rounded bg-blue-100 text-blue-700">Start</button>
+                    )}
+                    {isHost && item.status !== 'done' && (
+                      <button onClick={() => { const next = agenda.map(a => a.id===item.id?{...a,status:'done'}:a); setAgenda(next); persist('agenda', next); }} className="px-2 py-1 rounded bg-green-100 text-green-700">Done</button>
+                    )}
+                    {isHost && (
+                      <button onClick={() => { const next = agenda.filter(a => a.id!==item.id); setAgenda(next); persist('agenda', next); }} className="px-2 py-1 rounded bg-gray-100 text-gray-700">Remove</button>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h3 className="font-medium text-gray-900 mb-2">Turn Queue</h3>
+            <div className="flex gap-2 mb-3">
+              {turnQueue.includes(currentUserId) ? (
+                <button onClick={() => { const next = turnQueue.filter(id => id!==currentUserId); setTurnQueue(next); persist('queue', next); }} className="luvler-button-secondary">Leave queue</button>
+              ) : (
+                <button onClick={() => { const next = [...turnQueue, currentUserId]; setTurnQueue(next); persist('queue', next); }} className="luvler-button-primary">Join queue</button>
+              )}
+              {isHost && (
+                <>
+                  <button onClick={() => { const next = turnQueue.slice(1); setTurnQueue(next); persist('queue', next); }} className="px-3 py-2 rounded-xl border">Next</button>
+                  <button onClick={() => { setTurnQueue([]); persist('queue', []); }} className="px-3 py-2 rounded-xl border">Clear</button>
+                </>
+              )}
+            </div>
+            <ol className="text-sm text-gray-700 space-y-1 list-decimal list-inside">
+              {turnQueue.map((id, i) => (
+                <li key={id}>{id === currentUserId ? 'You' : `Participant ${i+1}`}</li>
+              ))}
+              {turnQueue.length===0 && <li className="text-xs text-gray-500 list-none">Queue is empty</li>}
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      {/* Co-op: Idea Board */}
+      <div className="luvler-card mt-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-3">Idea Board</h2>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            const form = e.target as HTMLFormElement;
+            const input = (form.elements.namedItem('noteText') as HTMLInputElement);
+            const sel = (form.elements.namedItem('noteColor') as HTMLSelectElement);
+            const text = input.value.trim();
+            if (!text) return;
+            const note: MeetupBoardNote = { id: `nb_${Date.now()}`, text, color: sel.value as any, createdAt: new Date() };
+            const next = [note, ...boardNotes];
+            setBoardNotes(next);
+            persist('board', next);
+            input.value='';
+          }}
+          className="flex gap-2 mb-3"
+        >
+          <input name="noteText" placeholder="Add a short note (max 140 chars)" maxLength={140} className="luvler-input flex-1" />
+          <select name="noteColor" className="luvler-input w-36" title="Note type" aria-label="Note type">
+            <option value="idea">Idea</option>
+            <option value="help">Help</option>
+            <option value="share">Share</option>
+          </select>
+          <button className="luvler-button-primary">Add</button>
+        </form>
+        <ul className="grid md:grid-cols-2 gap-3">
+          {boardNotes.map(n => (
+            <li key={n.id} className="p-3 rounded-xl border bg-gray-50 text-sm text-gray-800 flex items-start justify-between">
+              <span>{n.text}</span>
+              <button onClick={() => { const next = boardNotes.filter(b => b.id!==n.id); setBoardNotes(next); persist('board', next); }} className="text-xs text-gray-500 hover:text-gray-700">Remove</button>
+            </li>
+          ))}
+          {boardNotes.length===0 && <li className="text-xs text-gray-500 list-none">No notes yet</li>}
+        </ul>
+      </div>
+
+      {/* Co-op: Gallery (link/card only for MVP) */}
+      <div className="luvler-card mt-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-3">Show & Tell Gallery</h2>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            const form = e.target as HTMLFormElement;
+            const t = (form.elements.namedItem('gTitle') as HTMLInputElement).value.trim();
+            const u = (form.elements.namedItem('gUrl') as HTMLInputElement).value.trim();
+            const tag = (form.elements.namedItem('gTag') as HTMLSelectElement).value as any;
+            if (!t) return;
+            const item: MeetupGalleryItem = { id: `gi_${Date.now()}`, title: t, url: u || undefined, tag, createdAt: new Date() };
+            const next = [item, ...gallery];
+            setGallery(next); persist('gallery', next);
+            form.reset();
+          }}
+          className="grid md:grid-cols-3 gap-2 mb-3"
+        >
+          <input name="gTitle" placeholder="Title (e.g., Sketch, Card trade)" className="luvler-input" />
+          <input name="gUrl" placeholder="Optional link (image or doc)" className="luvler-input" />
+          <div className="flex gap-2">
+            <select name="gTag" className="luvler-input flex-1" title="Gallery tag" aria-label="Gallery tag">
+              <option value="share">Share</option>
+              <option value="ask">Ask</option>
+              <option value="celebrate">Celebrate</option>
+            </select>
+            <button className="luvler-button-primary">Add</button>
+          </div>
+        </form>
+        <ul className="space-y-2">
+          {gallery.map(item => (
+            <li key={item.id} className="p-3 rounded-xl border bg-white flex items-center justify-between">
+              <div>
+                <p className="font-medium text-gray-900 text-sm">{item.title} <span className="text-xs text-gray-500">• {item.tag}</span></p>
+                {item.url && <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 underline break-anywhere">{item.url}</a>}
+              </div>
+              <button onClick={() => { const next = gallery.filter(g => g.id!==item.id); setGallery(next); persist('gallery', next); }} className="text-xs text-gray-500 hover:text-gray-700">Remove</button>
+            </li>
+          ))}
+          {gallery.length===0 && <li className="text-xs text-gray-500 list-none">No items yet</li>}
+        </ul>
+      </div>
+
+      {/* Co-op: Resource Shelf */}
+      <div className="luvler-card mt-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-3">Resource Shelf</h2>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            const form = e.target as HTMLFormElement;
+            const t = (form.elements.namedItem('rTitle') as HTMLInputElement).value.trim();
+            const u = (form.elements.namedItem('rUrl') as HTMLInputElement).value.trim();
+            if (!t || !u) return;
+            const item: MeetupResourceLink = { id: `rl_${Date.now()}`, title: t, url: u, createdAt: new Date() };
+            const next = [item, ...resources];
+            setResources(next); persist('resources', next);
+            form.reset();
+          }}
+          className="grid md:grid-cols-3 gap-2 mb-3"
+        >
+          <input name="rTitle" placeholder="Title" className="luvler-input" />
+          <input name="rUrl" placeholder="URL" className="luvler-input" />
+          <button className="luvler-button-primary">Add</button>
+        </form>
+        <ul className="space-y-2">
+          {resources.map(item => (
+            <li key={item.id} className="p-3 rounded-xl border bg-white flex items-center justify-between">
+              <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-700 underline break-anywhere">{item.title}</a>
+              <button onClick={() => { const next = resources.filter(r => r.id!==item.id); setResources(next); persist('resources', next); }} className="text-xs text-gray-500 hover:text-gray-700">Remove</button>
+            </li>
+          ))}
+          {resources.length===0 && <li className="text-xs text-gray-500 list-none">No resources yet</li>}
+        </ul>
       </div>
     </div>
   );

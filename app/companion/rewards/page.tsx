@@ -10,26 +10,51 @@ export default function RewardsPage() {
   const [games, setGames] = useState<RewardGame[]>([]);
   const [showCreateForm, setShowCreateForm] = useState(false);
 
-  // Load games from localStorage (demo - would be API in production)
+  // Load games from API with localStorage fallback
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('luvler_reward_games');
-      if (saved) {
-        setGames(JSON.parse(saved).map((game: any) => ({
-          ...game,
-          createdAt: new Date(game.createdAt),
-          completedAt: game.completedAt ? new Date(game.completedAt) : undefined
-        })));
+    const load = async () => {
+      try {
+        const uid = (typeof window !== 'undefined' ? (sessionStorage.getItem('luvler_uid') || 'demo-user') : 'demo-user')
+        if (typeof window !== 'undefined') sessionStorage.setItem('luvler_uid', uid)
+        const res = await fetch(`/api/rewards?userId=${encodeURIComponent(uid)}`)
+        if (res.ok) {
+          const data = await res.json()
+          if (data.games) {
+            setGames(data.games.map((g: any) => ({
+              ...g,
+              createdAt: new Date(g.createdAt),
+              completedAt: g.completedAt ? new Date(g.completedAt) : undefined
+            })))
+            return
+          }
+        }
+      } catch {}
+      try {
+        const saved = localStorage.getItem('luvler_reward_games');
+        if (saved) {
+          setGames(JSON.parse(saved).map((game: any) => ({
+            ...game,
+            createdAt: new Date(game.createdAt),
+            completedAt: game.completedAt ? new Date(game.completedAt) : undefined
+          })));
+        }
+      } catch (error) {
+        console.warn('Error loading reward games:', error);
       }
-    } catch (error) {
-      console.warn('Error loading reward games:', error);
     }
+    load()
   }, []);
 
-  const saveGames = (updatedGames: RewardGame[]) => {
+  const saveGames = async (updatedGames: RewardGame[]) => {
     try {
+      const uid = (typeof window !== 'undefined' ? (sessionStorage.getItem('luvler_uid') || 'demo-user') : 'demo-user')
       localStorage.setItem('luvler_reward_games', JSON.stringify(updatedGames));
       setGames(updatedGames);
+      // Best-effort sync to API
+      const latest = updatedGames[updatedGames.length - 1]
+      if (latest) {
+        await fetch('/api/rewards', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId: uid, game: { ...latest, createdAt: latest.createdAt.toISOString(), completedAt: latest.completedAt ? latest.completedAt.toISOString() : undefined } }) })
+      }
     } catch (error) {
       console.warn('Error saving reward games:', error);
     }
@@ -61,7 +86,7 @@ export default function RewardsPage() {
     setShowCreateForm(false);
   };
 
-  const updateProgress = (gameId: string, increment: number = 1) => {
+  const updateProgress = async (gameId: string, increment: number = 1) => {
     const updatedGames = games.map(game => {
       if (game.id === gameId) {
         const newProgress = game.progress + increment;
@@ -75,10 +100,17 @@ export default function RewardsPage() {
       }
       return game;
     });
-    saveGames(updatedGames);
+    await saveGames(updatedGames);
+    try {
+      const uid = sessionStorage.getItem('luvler_uid') || 'demo-user'
+      const changed = updatedGames.find(g => g.id === gameId)
+      if (changed) {
+        await fetch('/api/rewards', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId: uid, gameId, changes: { progress: changed.progress, completedAt: changed.completedAt ? changed.completedAt.toISOString() : undefined, celebrated: changed.celebrated } }) })
+      }
+    } catch {}
   };
 
-  const modifyGame = (gameId: string, changes: Partial<RewardGame>) => {
+  const modifyGame = async (gameId: string, changes: Partial<RewardGame>) => {
     const updatedGames = games.map(game => {
       if (game.id === gameId) {
         return {
@@ -96,14 +128,25 @@ export default function RewardsPage() {
       }
       return game;
     });
-    saveGames(updatedGames);
+    await saveGames(updatedGames);
+    try {
+      const uid = sessionStorage.getItem('luvler_uid') || 'demo-user'
+      const changed = updatedGames.find(g => g.id === gameId)
+      if (changed) {
+        await fetch('/api/rewards', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId: uid, gameId, changes }) })
+      }
+    } catch {}
   };
 
-  const celebrateCompletion = (gameId: string) => {
+  const celebrateCompletion = async (gameId: string) => {
     const updatedGames = games.map(game =>
       game.id === gameId ? { ...game, celebrated: true } : game
     );
-    saveGames(updatedGames);
+    await saveGames(updatedGames);
+    try {
+      const uid = sessionStorage.getItem('luvler_uid') || 'demo-user'
+      await fetch('/api/rewards', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId: uid, gameId, changes: { celebrated: true } }) })
+    } catch {}
   };
 
   const activeGames = games.filter(game => game.isActive && !game.completedAt);
@@ -236,18 +279,22 @@ function RewardGameCard({ game, onProgress, onModify }: {
       {isEditing ? (
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Goal</label>
+            <label htmlFor="edit-goal" className="block text-sm font-medium text-gray-700 mb-1">Goal</label>
             <input
+              id="edit-goal"
               value={editGoal}
               onChange={e => setEditGoal(e.target.value)}
+              placeholder="Update goal"
               className="luvler-input w-full"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Reward</label>
+            <label htmlFor="edit-reward" className="block text-sm font-medium text-gray-700 mb-1">Reward</label>
             <input
+              id="edit-reward"
               value={editReward}
               onChange={e => setEditReward(e.target.value)}
+              placeholder="Update reward"
               className="luvler-input w-full"
             />
           </div>
@@ -275,6 +322,8 @@ function RewardGameCard({ game, onProgress, onModify }: {
             <button
               onClick={() => setIsEditing(true)}
               className="text-gray-400 hover:text-gray-600 p-1"
+              aria-label="Edit game"
+              title="Edit game"
             >
               <Edit3 className="w-4 h-4" />
             </button>
@@ -358,37 +407,40 @@ function CreateGameForm({ onCreate, onCancel }: {
     <div className="luvler-card">
       <h3 className="text-xl font-semibold text-gray-900 mb-4">Create Your Reward Game</h3>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">What do you want to accomplish?</label>
-          <input
-            value={goal}
-            onChange={e => setGoal(e.target.value)}
-            placeholder="e.g., Complete 5 math worksheets"
-            className="luvler-input w-full"
-            required
-          />
-        </div>
+          <div>
+            <label htmlFor="create-goal" className="block text-sm font-medium text-gray-700 mb-1">What do you want to accomplish?</label>
+            <input
+              id="create-goal"
+              value={goal}
+              onChange={e => setGoal(e.target.value)}
+              placeholder="e.g., Complete 5 math worksheets"
+              className="luvler-input w-full"
+              required
+            />
+          </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">What's your reward?</label>
-          <input
-            value={reward}
-            onChange={e => { setTouchedReward(true); setReward(e.target.value) }}
-            placeholder="e.g., Play video games for 30 minutes"
-            className="luvler-input w-full"
-            required
-          />
+          <div>
+            <label htmlFor="create-reward" className="block text-sm font-medium text-gray-700 mb-1">What's your reward?</label>
+            <input
+              id="create-reward"
+              value={reward}
+              onChange={e => { setTouchedReward(true); setReward(e.target.value) }}
+              placeholder="e.g., Play video games for 30 minutes"
+              className="luvler-input w-full"
+              required
+            />
           {target && (
             <p className="text-xs text-gray-500 mt-1">Suggested target: {target}</p>
           )}
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <div>
+            <label htmlFor="create-logic" className="block text-sm font-medium text-gray-700 mb-1">
             Your logic (optional)
             <span className="text-xs text-gray-500 block">Why does this reward motivate you?</span>
           </label>
           <textarea
+              id="create-logic"
             value={userLogic}
             onChange={e => { setTouchedLogic(true); setUserLogic(e.target.value) }}
             placeholder="This works for me because..."

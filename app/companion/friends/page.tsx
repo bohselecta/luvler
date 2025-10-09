@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { Heart, Users, BookOpen, Target, MessageCircle, Calendar, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { SplitView } from '@/components/layout/SplitView';
@@ -50,14 +51,46 @@ export default function FriendsPage() {
         <p className="text-gray-700">One clear step at a time. Practice → Reflect → Generalize.</p>
       </div>
 
-      {/* How it works (moved above to reduce crowding) */}
+      {/* How it works (icon strip) */}
       <div className="luvler-card mb-6">
-        <h3 className="font-semibold text-gray-900 mb-2">How it works</h3>
-        <div className="text-gray-700 space-y-2 text-sm">
-          <p>• Understanding → explore privately</p>
-          <p>• Practice → build skill safely</p>
-          <p>• Connect → interest‑based meetups</p>
-          <p>• Reflect → celebrate and refine</p>
+        <h3 className="font-semibold text-gray-900 mb-3">How it works</h3>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center">
+              <Image src="/icon-understanding.svg" width={24} height={24} alt="Understanding icon" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-900">Understanding</p>
+              <p className="text-xs text-gray-600">Explore privately</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center">
+              <Image src="/icon-practice.svg" width={24} height={24} alt="Practice icon" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-900">Practice</p>
+              <p className="text-xs text-gray-600">Build safely</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center">
+              <Image src="/icon-connect.svg" width={24} height={24} alt="Connect icon" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-900">Connect</p>
+              <p className="text-xs text-gray-600">Meetups by interest</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center">
+              <Image src="/icon-reflect.svg" width={24} height={24} alt="Reflect icon" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-900">Reflect</p>
+              <p className="text-xs text-gray-600">Celebrate & refine</p>
+            </div>
+          </div>
         </div>
       </div>
 

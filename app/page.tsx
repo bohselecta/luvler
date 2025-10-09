@@ -79,7 +79,7 @@ export default function RouterScreen() {
         {/* Features Preview */}
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 border border-gray-200">
           <h3 className="text-2xl font-semibold text-slate-900 mb-6 text-center">What makes Luvler special?</h3>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-4 gap-6">
             <div className="text-center">
               <img src="/spot-friendship.png" alt="Friendship spot art" className="w-24 h-20 object-contain mx-auto mb-4" />
               <h4 className="font-bold text-gray-900 mb-2">Friendship as Confidence</h4>
@@ -94,6 +94,11 @@ export default function RouterScreen() {
               <img src="/spot-rewards.png" alt="Rewards spot art" className="w-24 h-20 object-contain mx-auto mb-4" />
               <h4 className="font-bold text-gray-900 mb-2">Your Autonomy Matters</h4>
               <p className="text-gray-600">You choose the goal, the pace, and who can see your data</p>
+            </div>
+            <div className="text-center">
+              <img src="/spot-learn.png" alt="Learning spot art" className="w-24 h-20 object-contain mx-auto mb-4" />
+              <h4 className="font-bold text-gray-900 mb-2">Learn, Your Way</h4>
+              <p className="text-gray-600">Gentle tracks that fit your interests and energy</p>
             </div>
           </div>
         </div>
