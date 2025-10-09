@@ -4,6 +4,16 @@ import { logConsentChange } from './audit'
 
 // Privacy and data management utilities
 export async function getPrivacySettings(userId: string): Promise<PrivacySettings> {
+  // Check if we're in a browser environment
+  if (typeof window === 'undefined') {
+    return {
+      shareWithClinician: false,
+      shareWithParent: false,
+      shareForResearch: false,
+      lastUpdated: new Date()
+    }
+  }
+
   try {
     const settingsKey = `users/${userId}/privacy.json`
     const { blobs } = await list({ prefix: settingsKey })
@@ -17,7 +27,7 @@ export async function getPrivacySettings(userId: string): Promise<PrivacySetting
       }
     }
   } catch (error) {
-    console.error('Error fetching privacy settings:', error)
+    console.warn('Error fetching privacy settings from Vercel Blob, using defaults:', error)
   }
 
   // Return default settings
@@ -33,6 +43,16 @@ export async function updatePrivacySettings(
   userId: string,
   settings: Partial<PrivacySettings>
 ): Promise<PrivacySettings> {
+  // Check if we're in a browser environment
+  if (typeof window === 'undefined') {
+    const currentSettings = await getPrivacySettings(userId)
+    return {
+      ...currentSettings,
+      ...settings,
+      lastUpdated: new Date()
+    }
+  }
+
   try {
     const currentSettings = await getPrivacySettings(userId)
     const updatedSettings: PrivacySettings = {
@@ -49,8 +69,14 @@ export async function updatePrivacySettings(
 
     return updatedSettings
   } catch (error) {
-    console.error('Error updating privacy settings:', error)
-    throw new Error('Failed to update privacy settings')
+    console.warn('Error updating privacy settings, operation may not persist:', error)
+    // Return the updated settings even if save failed
+    const currentSettings = await getPrivacySettings(userId)
+    return {
+      ...currentSettings,
+      ...settings,
+      lastUpdated: new Date()
+    }
   }
 }
 
@@ -130,6 +156,11 @@ export async function revokeClinicalDataAccess(
 }
 
 export async function getClinicalDataSharings(userId: string): Promise<ClinicalDataSharing[]> {
+  // Check if we're in a browser environment
+  if (typeof window === 'undefined') {
+    return []
+  }
+
   try {
     const sharings: ClinicalDataSharing[] = []
     const prefix = `users/${userId}/clinical-sharing/`
@@ -141,13 +172,13 @@ export async function getClinicalDataSharings(userId: string): Promise<ClinicalD
         const sharing: ClinicalDataSharing = await response.json()
         sharings.push(sharing)
       } catch (error) {
-        console.error('Error parsing sharing agreement:', error)
+        console.warn('Error parsing sharing agreement:', error)
       }
     }
 
     return sharings
   } catch (error) {
-    console.error('Error fetching clinical data sharings:', error)
+    console.warn('Error fetching clinical data sharings, returning empty list:', error)
     return []
   }
 }

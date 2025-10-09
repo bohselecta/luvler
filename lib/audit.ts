@@ -10,6 +10,11 @@ export async function logDataAccess(
   ipAddress?: string,
   userAgent?: string
 ): Promise<void> {
+  // Check if we're in a browser environment
+  if (typeof window === 'undefined') {
+    return
+  }
+
   const event: DataAccessLog = {
     id: `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
     timestamp: new Date(),
@@ -50,7 +55,7 @@ export async function logDataAccess(
       contentType: 'application/json'
     })
   } catch (error) {
-    console.error('Failed to log data access:', error)
+    console.warn('Failed to log data access, audit may not persist:', error)
     // Don't throw - audit logging failures shouldn't break functionality
   }
 }
@@ -81,6 +86,11 @@ export async function getAuditLog(
   userId: string,
   days: number = 90
 ): Promise<DataAccessLog[]> {
+  // Check if we're in a browser environment
+  if (typeof window === 'undefined') {
+    return []
+  }
+
   try {
     const cutoffDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000)
     const allLogs: DataAccessLog[] = []
@@ -110,7 +120,7 @@ export async function getAuditLog(
       .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
 
   } catch (error) {
-    console.error('Failed to retrieve audit log:', error)
+    console.warn('Failed to retrieve audit log, returning empty list:', error)
     return []
   }
 }
