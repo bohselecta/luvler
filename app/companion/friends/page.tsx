@@ -57,7 +57,7 @@ export default function FriendsPage() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center">
-              <Image src="/icon-understanding.svg" width={24} height={24} alt="Understanding icon" />
+              <Image src="/icon-understanding.png" width={24} height={24} alt="Understanding icon" />
             </div>
             <div>
               <p className="text-sm font-medium text-gray-900">Understanding</p>
@@ -66,7 +66,7 @@ export default function FriendsPage() {
           </div>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center">
-              <Image src="/icon-practice.svg" width={24} height={24} alt="Practice icon" />
+              <Image src="/icon-practice.png" width={24} height={24} alt="Practice icon" />
             </div>
             <div>
               <p className="text-sm font-medium text-gray-900">Practice</p>
@@ -75,7 +75,7 @@ export default function FriendsPage() {
           </div>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center">
-              <Image src="/icon-connect.svg" width={24} height={24} alt="Connect icon" />
+              <Image src="/icon-connect.png" width={24} height={24} alt="Connect icon" />
             </div>
             <div>
               <p className="text-sm font-medium text-gray-900">Connect</p>
@@ -84,7 +84,7 @@ export default function FriendsPage() {
           </div>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center">
-              <Image src="/icon-reflect.svg" width={24} height={24} alt="Reflect icon" />
+              <Image src="/icon-reflect.png" width={24} height={24} alt="Reflect icon" />
             </div>
             <div>
               <p className="text-sm font-medium text-gray-900">Reflect</p>
