@@ -498,6 +498,7 @@ export interface VirtualMeetup {
   topic: string;
   specialInterest: string;
   neurotype?: 'autistic-only' | 'mixed';
+  location?: string; // Generic location label (e.g., "Online", "Community Room")
   hostId: string;
   participants: MeetupParticipant[];
   templateId: string;
@@ -531,6 +532,43 @@ export interface MeetupSettings {
   duration: number;
   recordingEnabled: boolean;
   breakoutRooms: boolean;
+}
+
+// Co-op room contributions (demo/local storage types)
+export interface MeetupAgendaItem {
+  id: string;
+  title: string;
+  status: 'pending' | 'active' | 'done';
+  estimatedMinutes?: number;
+}
+
+export interface MeetupTurnQueue {
+  userIds: string[];
+}
+
+export interface MeetupBoardNote {
+  id: string;
+  text: string;
+  color: 'idea' | 'help' | 'share';
+  pinned?: boolean;
+  createdAt: Date;
+}
+
+export interface MeetupGalleryItem {
+  id: string;
+  title: string;
+  url?: string; // optional external link or image
+  tag: 'share' | 'ask' | 'celebrate';
+  caption?: string;
+  createdAt: Date;
+}
+
+export interface MeetupResourceLink {
+  id: string;
+  title: string;
+  url: string;
+  approved?: boolean;
+  createdAt: Date;
 }
 
 export interface MeetupTemplate {

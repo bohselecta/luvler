@@ -14,7 +14,7 @@ export default function CompanionLayout({ children }: { children: React.ReactNod
     { href: '/companion/friends', label: 'Friends', icon: Heart },
     { href: '/self-advocacy', label: 'Goals', icon: Target },
     { href: '/companion/rewards', label: 'Rewards', icon: Shield },
-    { href: '/learn', label: 'Learn', icon: BookOpen },
+    { href: 'https://www.autismspeaks.org/', label: 'Learn', icon: BookOpen },
     { href: '/privacy', label: 'Privacy', icon: Users },
   ]
 
@@ -80,8 +80,14 @@ export default function CompanionLayout({ children }: { children: React.ReactNod
           </div>
           <nav className="hidden md:flex items-center gap-2">
             {topTabs.map(({ href, label, icon: Icon }) => {
-              const active = pathname === href || (href !== '/companion' && pathname.startsWith(href))
-              return (
+              const isExternal = href.startsWith('http')
+              const active = !isExternal && (pathname === href || (href !== '/companion' && pathname.startsWith(href)))
+              return isExternal ? (
+                <a key={href} href={href} target="_blank" rel="noopener noreferrer" className={`px-3 py-1.5 rounded-lg text-sm flex items-center gap-2 text-gray-700 hover:bg-gray-100`}>
+                  <Icon className="w-4 h-4" />
+                  {label}
+                </a>
+              ) : (
                 <Link key={href} href={href} className={`px-3 py-1.5 rounded-lg text-sm flex items-center gap-2 ${active ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100'}`}>
                   <Icon className="w-4 h-4" />
                   {label}

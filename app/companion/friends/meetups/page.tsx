@@ -34,6 +34,7 @@ export default function MeetupsPage() {
           topic: 'Share tips and strategies for Pokemon TCG',
           specialInterest: 'pokemon',
           neurotype: 'autistic-only',
+          location: 'Online',
           hostId: 'demo-host',
           participants: [
             { userId: 'demo-host', personalGoals: ['Share 3 strategies', 'Learn new deck ideas'], joinedAt: new Date() },
@@ -60,6 +61,7 @@ export default function MeetupsPage() {
           topic: 'Share and learn drawing techniques',
           specialInterest: 'drawing',
           neurotype: 'autistic-only',
+          location: 'Community Room',
           hostId: 'demo-host-2',
           participants: [
             { userId: 'demo-host-2', personalGoals: ['Show watercolor technique'], joinedAt: new Date() }
@@ -76,6 +78,58 @@ export default function MeetupsPage() {
           },
           scheduledFor: new Date(Date.now() + 24 * 60 * 60 * 1000), // Tomorrow
           duration: 60,
+          status: 'scheduled',
+          createdAt: new Date()
+        },
+        {
+          id: 'demo-meetup-3',
+          title: 'Walk & Talk — Headphones On',
+          topic: 'Gentle conversation prompts while walking or pacing at home',
+          specialInterest: 'wellbeing',
+          neurotype: 'autistic-only',
+          location: 'Online',
+          hostId: 'demo-host-3',
+          participants: [
+            { userId: 'demo-host-3', personalGoals: ['Answer 2 prompts'], joinedAt: new Date() }
+          ],
+          templateId: 'walk-talk',
+          settings: {
+            audioOnly: true,
+            textChatEnabled: false,
+            structuredTurns: true,
+            maxParticipants: 5,
+            duration: 30,
+            recordingEnabled: false,
+            breakoutRooms: false
+          },
+          scheduledFor: new Date(Date.now() + 3 * 60 * 60 * 1000),
+          duration: 30,
+          status: 'scheduled',
+          createdAt: new Date()
+        },
+        {
+          id: 'demo-meetup-4',
+          title: 'Music Share Circle — One Song, One Story',
+          topic: 'Share a song and a short story about why it matters',
+          specialInterest: 'music',
+          neurotype: 'autistic-only',
+          location: 'Community Room',
+          hostId: 'demo-host-4',
+          participants: [
+            { userId: 'demo-host-4', personalGoals: ['Share 1 song'], joinedAt: new Date() }
+          ],
+          templateId: 'music-share',
+          settings: {
+            audioOnly: false,
+            textChatEnabled: true,
+            structuredTurns: true,
+            maxParticipants: 10,
+            duration: 45,
+            recordingEnabled: false,
+            breakoutRooms: true
+          },
+          scheduledFor: new Date(Date.now() + 48 * 60 * 60 * 1000),
+          duration: 45,
           status: 'scheduled',
           createdAt: new Date()
         }
@@ -216,6 +270,12 @@ export default function MeetupsPage() {
                 <Clock className="w-4 h-4" />
                 {meetup.duration} minutes
               </div>
+              {meetup.location && (
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <Users className="w-4 h-4" />
+                  {meetup.location}
+                </div>
+              )}
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Users className="w-4 h-4" />
                 {meetup.participants.length}/{meetup.settings.maxParticipants} joined

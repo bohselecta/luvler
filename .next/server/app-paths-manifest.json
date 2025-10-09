@@ -1,9 +1,7 @@
 {
+  "/privacy/page": "app/privacy/page.js",
   "/page": "app/page.js",
-  "/api/pathways/route": "app/api/pathways/route.js",
-  "/api/log-client/route": "app/api/log-client/route.js",
+  "/legal/privacy/page": "app/legal/privacy/page.js",
   "/companion/page": "app/companion/page.js",
-  "/companion/friends/explore/page": "app/companion/friends/explore/page.js",
-  "/companion/friends/meetups/page": "app/companion/friends/meetups/page.js",
-  "/companion/friends/page": "app/companion/friends/page.js"
+  "/companion/friends/meetups/page": "app/companion/friends/meetups/page.js"
 }

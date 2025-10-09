@@ -110,11 +110,11 @@ body {
 /* Anthropic-inspired Typography Scale */
 @layer base {
   p, li {
-    @apply text-[17.5px] leading-[1.7] text-slate-800 dark:text-slate-200;
+    @apply text-[16px] md:text-[17.5px] leading-[1.7] text-slate-800 dark:text-slate-200;
   }
   
   h1 {
-    @apply text-[2.5rem] sm:text-[3rem] md:text-6xl font-semibold tracking-tight text-slate-900 dark:text-slate-50;
+    @apply text-[2rem] sm:text-[2.5rem] md:text-6xl font-semibold tracking-tight text-slate-900 dark:text-slate-50;
   }
   
   h2 {
@@ -128,6 +128,23 @@ body {
   h4 {
     @apply text-xl font-medium mt-6 mb-3 text-slate-900 dark:text-slate-50;
   }
+}
+
+/* Prevent media from causing horizontal scroll on small screens */
+img, video, canvas, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prevent wide grids from overflowing on mobile */
+.grid {
+  min-width: 0;
+}
+
+/* Utility: clamp long words/URLs to avoid overflow */
+.break-anywhere {
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 /* Autism-friendly design utilities */

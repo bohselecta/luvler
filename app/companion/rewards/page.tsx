@@ -35,7 +35,15 @@ export default function RewardsPage() {
     }
   };
 
-  const createGame = (goal: string, reward: string, userLogic?: string) => {
+  const parseTargetFromGoal = (text: string): number => {
+    const m = text.match(/\b(\d{1,3})\b/)
+    if (m) return Math.max(1, parseInt(m[1]))
+    if (/sessions?|times?|reps?/i.test(text)) return 10
+    if (/weeks?|days?/i.test(text)) return 7
+    return 1
+  }
+
+  const createGame = (goal: string, reward: string, userLogic?: string, targetOverride?: number) => {
     const newGame: RewardGame = {
       id: Date.now().toString(),
       userId: 'demo-user', // Would be real user ID
@@ -43,7 +51,7 @@ export default function RewardsPage() {
       reward,
       userLogic,
       progress: 0,
-      target: 1, // Will be parsed from goal
+      target: targetOverride && targetOverride > 0 ? targetOverride : parseTargetFromGoal(goal),
       isActive: true,
       modifications: [],
       createdAt: new Date()
@@ -299,20 +307,50 @@ function RewardGameCard({ game, onProgress, onModify }: {
 }
 
 function CreateGameForm({ onCreate, onCancel }: {
-  onCreate: (goal: string, reward: string, userLogic?: string) => void;
+  onCreate: (goal: string, reward: string, userLogic?: string, targetOverride?: number) => void;
   onCancel: () => void;
 }) {
   const [goal, setGoal] = useState('');
   const [reward, setReward] = useState('');
   const [userLogic, setUserLogic] = useState('');
+  const [target, setTarget] = useState<number | undefined>(undefined);
+  const [touchedReward, setTouchedReward] = useState(false);
+  const [touchedLogic, setTouchedLogic] = useState(false);
+
+  // Heuristic suggestion engine (Malachi-inspired autonomy design)
+  const suggestFromGoal = (text: string) => {
+    const lower = text.toLowerCase()
+    let suggestedReward = 'Do something you enjoy for 15–30 minutes'
+    if (/homework|study|worksheet|school/.test(lower)) suggestedReward = 'Play a game or watch one episode'
+    if (/pokemon|baseball|cards?/.test(lower)) suggestedReward = 'Open a 10‑card pack or sort your cards'
+    if (/exercise|walk|run|gym/.test(lower)) suggestedReward = 'Listen to a favorite song or take a relaxing break'
+    if (/practice|piano|instrument|music/.test(lower)) suggestedReward = 'Watch a short video or free time on your phone'
+    const m = lower.match(/\b(\d{1,3})\b/)
+    const suggestedTarget = m ? Math.max(1, parseInt(m[1])) : (/sessions?|times?|reps?/.test(lower) ? 10 : 1)
+    const logic = "This reward makes it easier to start and keeps effort feeling worthwhile."
+    return { suggestedReward, suggestedTarget, logic }
+  }
+
+  // Debounce suggestions while typing
+  useEffect(() => {
+    if (!goal.trim()) return
+    const t = setTimeout(() => {
+      const { suggestedReward, suggestedTarget, logic } = suggestFromGoal(goal)
+      if (!touchedReward && !reward.trim()) setReward(suggestedReward)
+      if (!touchedLogic && !userLogic.trim()) setUserLogic(logic)
+      setTarget(suggestedTarget)
+    }, 300)
+    return () => clearTimeout(t)
+  }, [goal])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (goal.trim() && reward.trim()) {
-      onCreate(goal.trim(), reward.trim(), userLogic.trim() || undefined);
+      onCreate(goal.trim(), reward.trim(), userLogic.trim() || undefined, target);
       setGoal('');
       setReward('');
       setUserLogic('');
+      setTarget(undefined)
     }
   };
 
@@ -335,11 +373,14 @@ function CreateGameForm({ onCreate, onCancel }: {
           <label className="block text-sm font-medium text-gray-700 mb-1">What's your reward?</label>
           <input
             value={reward}
-            onChange={e => setReward(e.target.value)}
+            onChange={e => { setTouchedReward(true); setReward(e.target.value) }}
             placeholder="e.g., Play video games for 30 minutes"
             className="luvler-input w-full"
             required
           />
+          {target && (
+            <p className="text-xs text-gray-500 mt-1">Suggested target: {target}</p>
+          )}
         </div>
 
         <div>
@@ -349,7 +390,7 @@ function CreateGameForm({ onCreate, onCancel }: {
           </label>
           <textarea
             value={userLogic}
-            onChange={e => setUserLogic(e.target.value)}
+            onChange={e => { setTouchedLogic(true); setUserLogic(e.target.value) }}
             placeholder="This works for me because..."
             className="luvler-textarea w-full"
             rows={3}
