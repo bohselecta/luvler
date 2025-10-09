@@ -429,3 +429,170 @@ export const TEXT_SIZES: TextSize[] = ['normal', 'large', 'xlarge'];
 export const URGENCY_LEVELS: UrgencyLevel[] = ['now', 'soon', 'someday'];
 
 export const ENERGY_LEVELS: EnergyLevel[] = ['low', 'medium', 'high'];
+
+// Processing Modality Types (for Confidence Engine)
+export type ProcessingModality = 'narrative' | 'visual' | 'systematic' | 'numerical' | 'kinesthetic' | 'musical' | 'other';
+
+export interface OnboardingProfile {
+  role?: string;
+  interests?: string[];
+  goal?: string;
+  comfort?: { reducedMotion?: boolean; highContrast?: boolean };
+  // New fields for enhanced onboarding
+  specialInterests?: string[];
+  processingModalities?: ProcessingModality[];
+  modalityDescription?: string;
+  privacyConsent?: boolean;
+}
+
+// Privacy and Data Sharing Types
+export interface PrivacySettings {
+  shareWithClinician?: boolean;
+  clinicianId?: string;
+  clinicianAccessLevel?: 'none' | 'summary' | 'full';
+  clinicianAccessExpires?: Date;
+  shareWithParent?: boolean;
+  parentId?: string;
+  parentAccessLevel?: 'none' | 'summary';
+  shareForResearch?: boolean;
+  lastUpdated?: Date;
+}
+
+export interface ClinicalDataSharing {
+  sharedDataTypes: ('goals' | 'progress' | 'reflections')[];
+  accessLevel: 'summary' | 'full';
+  expiresAt?: Date;
+  grantedAt: Date;
+  clinicianId: string;
+  canRevoke: boolean;
+}
+
+// Friendship and Social Features
+export interface FriendshipPathway {
+  id: string;
+  userId: string;
+  title: string;
+  goal: string;
+  steps: FriendshipStep[];
+  specialInterests: string[];
+  processingModality?: ProcessingModality;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface FriendshipStep {
+  id: string;
+  order: number;
+  phase: 'understanding' | 'practice' | 'opportunities' | 'confidence';
+  instruction: string;
+  tip?: string;
+  completed: boolean;
+  completedAt?: Date;
+}
+
+export interface VirtualMeetup {
+  id: string;
+  title: string;
+  topic: string;
+  specialInterest: string;
+  hostId: string;
+  participants: MeetupParticipant[];
+  templateId: string;
+  settings: MeetupSettings;
+  scheduledFor: Date;
+  duration: number; // minutes
+  status: 'scheduled' | 'active' | 'completed' | 'cancelled';
+  createdAt: Date;
+}
+
+export interface MeetupParticipant {
+  userId: string;
+  personalGoals: string[];
+  joinedAt: Date;
+  reflection?: MeetupReflection;
+}
+
+export interface MeetupReflection {
+  submittedAt: Date;
+  rating: number; // 1-5
+  whatWentWell: string;
+  whatCouldImprove: string;
+  wouldAttendAgain: boolean;
+}
+
+export interface MeetupSettings {
+  audioOnly: boolean;
+  textChatEnabled: boolean;
+  structuredTurns: boolean;
+  maxParticipants: number;
+  duration: number;
+  recordingEnabled: boolean;
+  breakoutRooms: boolean;
+}
+
+export interface MeetupTemplate {
+  id: string;
+  name: string;
+  description: string;
+  phases: MeetupPhase[];
+  facilitationGuide: string;
+  targetAudience: string;
+  clinicalNotes?: string;
+}
+
+export interface MeetupPhase {
+  name: string;
+  duration: number;
+  description: string;
+  prompts: string[];
+}
+
+// Reward Game System
+export interface RewardGame {
+  id: string;
+  userId: string;
+  goal: string;
+  reward: string;
+  userLogic?: string; // User's own reasoning
+  progress: number;
+  target: number;
+  isActive: boolean;
+  modifications: RewardModification[];
+  createdAt: Date;
+  completedAt?: Date;
+  celebrated?: boolean;
+}
+
+export interface RewardModification {
+  date: Date;
+  changes: string;
+  reason?: string;
+}
+
+// Audit and Compliance
+export interface AuditEvent {
+  id: string;
+  timestamp: Date;
+  userId: string;
+  action: string;
+  resource: string;
+  accessorId?: string;
+  details?: Record<string, any>;
+}
+
+export interface DataAccessLog {
+  id: string;
+  timestamp: Date;
+  userId: string;
+  accessorId: string;
+  dataType: 'personal' | 'clinical' | 'anonymized';
+  accessType: 'read' | 'write' | 'share' | 'revoke';
+  ipAddress?: string;
+  userAgent?: string;
+}
+
+// Enhanced SimpleStep with contextual reasons
+export interface EnhancedSimpleStep extends SimpleStep {
+  contextualReason?: string; // "This helps you take care of yourself"
+  horizonGoal?: string; // Optional vague future benefit
+}

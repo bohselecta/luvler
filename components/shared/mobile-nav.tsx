@@ -24,9 +24,11 @@ export function MobileNav() {
           
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6 text-sm">
+            <Link href="/companion" className="text-gray-700 dark:text-gray-300 hover:underline">Companion</Link>
             <Link href="/clients" className="text-gray-700 dark:text-gray-300 hover:underline">Clients</Link>
             <Link href="/pricing" className="text-gray-700 dark:text-gray-300 hover:underline">Pricing</Link>
             <Link href="/consent" className="text-gray-700 dark:text-gray-300 hover:underline">Informed Use</Link>
+            <Link href="/privacy" className="text-gray-700 dark:text-gray-300 hover:underline">Privacy</Link>
             <Link href="/login" className="text-gray-700 dark:text-gray-300 hover:underline">Sign in</Link>
           </nav>
 
@@ -47,29 +49,43 @@ export function MobileNav() {
         {isOpen && (
           <div id="mobile-menu" className="md:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
             <nav className="flex flex-col px-4 py-4 space-y-3">
-              <Link 
-                href="/clients" 
+              <Link
+                href="/companion"
+                className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 py-2 text-base transition-colors"
+                onClick={closeMenu}
+              >
+                Companion
+              </Link>
+              <Link
+                href="/clients"
                 className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 py-2 text-base transition-colors"
                 onClick={closeMenu}
               >
                 Clients
               </Link>
-              <Link 
-                href="/pricing" 
+              <Link
+                href="/pricing"
                 className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 py-2 text-base transition-colors"
                 onClick={closeMenu}
               >
                 Pricing
               </Link>
-              <Link 
-                href="/consent" 
+              <Link
+                href="/consent"
                 className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 py-2 text-base transition-colors"
                 onClick={closeMenu}
               >
                 Informed Use
               </Link>
-              <Link 
-                href="/login" 
+              <Link
+                href="/privacy"
+                className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 py-2 text-base transition-colors"
+                onClick={closeMenu}
+              >
+                Privacy
+              </Link>
+              <Link
+                href="/login"
                 className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 py-2 text-base transition-colors"
                 onClick={closeMenu}
               >

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Heart, BookOpen, Users, Briefcase, ChevronRight, Sparkles } from 'lucide-react';
+import { Heart, BookOpen, Users, Briefcase, ChevronRight, Sparkles, Target } from 'lucide-react';
 import Image from 'next/image';
 
 export default function RouterScreen() {
@@ -22,10 +22,10 @@ export default function RouterScreen() {
         {/* Header */}
         <div className="mb-16">
           <h1 className="mt-6 md:mt-10 text-[2.5rem] sm:text-[3rem] md:text-[4rem] leading-[1.1] font-semibold tracking-tight text-slate-900 max-w-4xl font-display">
-            Evidence‑based goals with a gentle, autism‑friendly design
+            A neurodivergent life companion—at home and in clinic
           </h1>
           <p className="mt-4 md:mt-6 text-lg md:text-[22px] leading-[1.7] font-normal text-slate-600 max-w-[48ch] font-serif">
-            Luvler turns everyday goals into clear, step‑by‑step plans—grounded in ABA best practices and written in respectful, plain language for families and clinicians.
+            Clear steps for goals. Gentle tools for friendships, learning, and daily independence. Built for how you think, not how others expect you to.
           </p>
         </div>
 
@@ -91,25 +91,25 @@ export default function RouterScreen() {
           <h3 className="text-2xl font-semibold text-slate-900 mb-6 text-center">What makes Luvler special?</h3>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="text-center">
-              <div className="bg-primary-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Heart className="w-8 h-8 text-primary-600" />
+              <div className="bg-pink-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Heart className="w-8 h-8 text-pink-600" />
               </div>
-              <h4 className="font-bold text-gray-900 mb-2">Autism-Friendly Design</h4>
-              <p className="text-gray-600">Clear, predictable interface that respects sensory and cognitive differences</p>
+              <h4 className="font-bold text-gray-900 mb-2">Friendship as Confidence</h4>
+              <p className="text-gray-600">Build social confidence through structured friendship pathways, not conformity</p>
             </div>
             <div className="text-center">
-              <div className="bg-secondary-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Sparkles className="w-8 h-8 text-secondary-600" />
+              <div className="bg-blue-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Sparkles className="w-8 h-8 text-blue-600" />
               </div>
-              <h4 className="font-bold text-gray-900 mb-2">AI-Powered Support</h4>
-              <p className="text-gray-600">Smart task breakdown and evidence-based goal setting</p>
+              <h4 className="font-bold text-gray-900 mb-2">Personalized to How You Think</h4>
+              <p className="text-gray-600">AI adapts language and examples based on your processing modality and special interests</p>
             </div>
             <div className="text-center">
-              <div className="bg-accent-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <BookOpen className="w-8 h-8 text-accent-600" />
+              <div className="bg-purple-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Target className="w-8 h-8 text-purple-600" />
               </div>
-              <h4 className="font-bold text-gray-900 mb-2">Progress Tracking</h4>
-              <p className="text-gray-600">Visual progress indicators and respectful celebration of achievements</p>
+              <h4 className="font-bold text-gray-900 mb-2">Your Autonomy Matters</h4>
+              <p className="text-gray-600">Self-directed reward systems and full control over data sharing with clinicians</p>
             </div>
           </div>
         </div>
