@@ -16,8 +16,8 @@ export async function GET(
     const meetupKey = `meetups/${meetupId}.json`
 
     try {
-      const { blobs } = await head(meetupKey)
-      const response = await fetch(blobs.url)
+      const blobInfo = await head(meetupKey)
+      const response = await fetch(blobInfo.url)
       const meetup: VirtualMeetup = await response.json()
 
       // Check if user can access this meetup (public for now, but could add privacy later)

@@ -1,1 +1,1 @@
-{"version":1,"functions":{"/api/budget":{},"/api/analyze":{},"/api/pathways":{},"/api/tracks":{}}}
+{"version":1,"functions":{"/api/analyze":{},"/api/community/moderate":{},"/api/budget":{},"/api/meetups/[meetupId]":{},"/api/meetups/create":{},"/api/meetups/join":{},"/api/pathways":{},"/api/tracks":{}}}

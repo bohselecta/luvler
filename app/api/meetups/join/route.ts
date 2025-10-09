@@ -22,9 +22,8 @@ export async function POST(request: Request) {
     let meetup: VirtualMeetup
 
     try {
-      const { blobs } = await head(meetupKey)
-      // Fetch the actual content
-      const response = await fetch(blobs.url)
+      const blobInfo = await head(meetupKey)
+      const response = await fetch(blobInfo.url)
       meetup = await response.json()
     } catch (error) {
       return new Response(JSON.stringify({ error: 'Meetup not found' }), { status: 404 })

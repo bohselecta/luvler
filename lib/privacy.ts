@@ -43,7 +43,7 @@ export async function updatePrivacySettings(
 
     const settingsKey = `users/${userId}/privacy.json`
     await put(settingsKey, JSON.stringify(updatedSettings), {
-      access: 'private',
+      access: 'public',
       contentType: 'application/json'
     })
 

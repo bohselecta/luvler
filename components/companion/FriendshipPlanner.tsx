@@ -99,7 +99,7 @@ export function FriendshipPlanner({
       if (d.steps) {
         setSteps(d.steps)
         // Mark understanding phase as completed when we generate steps
-        setCompletedPhases(new Set(['understanding']))
+        setCompletedPhases(new Set<FriendshipPhase>(['understanding']))
       }
     } finally {
       setLoading(false)

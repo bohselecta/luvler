@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Plus, Users, Calendar, Clock, Search, Filter } from 'lucide-react';
+import { ArrowLeft, Plus, Users, Calendar, Clock, Search, Filter, Heart } from 'lucide-react';
 import { VirtualMeetup, MeetupTemplate } from '@/lib/types';
 
 export default function MeetupsPage() {
