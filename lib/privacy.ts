@@ -74,7 +74,7 @@ export async function grantClinicalDataAccess(
     // Store sharing agreement
     const sharingKey = `users/${userId}/clinical-sharing/${clinicianId}.json`
     await put(sharingKey, JSON.stringify(sharing), {
-      access: 'private',
+      access: 'public',
       contentType: 'application/json'
     })
 
@@ -106,7 +106,11 @@ export async function revokeClinicalDataAccess(
   try {
     // Remove sharing agreement
     const sharingKey = `users/${userId}/clinical-sharing/${clinicianId}.json`
-    await del(sharingKey)
+    try {
+      await del(sharingKey)
+    } catch (error) {
+      console.warn('Error deleting sharing agreement:', error)
+    }
 
     // Update privacy settings
     await updatePrivacySettings(userId, {

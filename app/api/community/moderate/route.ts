@@ -45,7 +45,7 @@ export async function POST(request: Request) {
     // Store moderation event
     const moderationKey = `moderation/${entityType}/${entityId}/${moderationEvent.id}.json`
     await put(moderationKey, JSON.stringify(moderationEvent), {
-      access: 'private',
+      access: 'public',
       contentType: 'application/json'
     })
 
@@ -78,7 +78,7 @@ async function updateEntityStatus(entityType: string, entityId: string, action: 
 
     const statusKey = `moderation/status/${entityType}/${entityId}.json`
     await put(statusKey, JSON.stringify(statusUpdate), {
-      access: 'private',
+      access: 'public',
       contentType: 'application/json'
     })
   } catch (error) {

@@ -46,7 +46,7 @@ export async function logDataAccess(
 
     // Save updated log
     await put(auditKey, JSON.stringify(filteredLogs), {
-      access: 'private',
+      access: 'public',
       contentType: 'application/json'
     })
   } catch (error) {
