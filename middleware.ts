@@ -14,6 +14,12 @@ const isPublicRoute = createRouteMatcher([
   '/privacy',
   '/community',
   '/clients',
+  '/about',
+  // Public APIs for MVP
+  '/api/rewards',
+  '/api/rewards/(.*)',
+  '/api/meetups',
+  '/api/meetups/(.*)',
   '/legal(.*)',
 ])
 

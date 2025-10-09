@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { put, list, head, del } from '@vercel/blob'
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 type RewardGame = {
   id: string
   userId: string
@@ -28,14 +31,19 @@ export async function GET(req: NextRequest) {
     const files = await list({ prefix })
     const games: RewardGame[] = []
     for (const file of files.blobs) {
-      const res = await fetch(file.url)
-      if (res.ok) {
-        const data = await res.json()
-        games.push(data)
+      try {
+        const res = await fetch(file.url)
+        if (res.ok) {
+          const data = await res.json()
+          games.push(data)
+        }
+      } catch (e) {
+        console.error('Rewards GET fetch blob error:', e)
       }
     }
     return NextResponse.json({ success: true, games })
   } catch (error: any) {
+    console.error('Rewards GET error:', error)
     return NextResponse.json({ success: false, error: error?.message || 'Failed to list' }, { status: 500 })
   }
 }
@@ -52,6 +60,7 @@ export async function POST(req: NextRequest) {
     await put(key, JSON.stringify(payload), { access: 'public', contentType: 'application/json' })
     return NextResponse.json({ success: true, game: payload })
   } catch (error: any) {
+    console.error('Rewards POST error:', error)
     return NextResponse.json({ success: false, error: error?.message || 'Failed to create' }, { status: 500 })
   }
 }
@@ -71,6 +80,7 @@ export async function PATCH(req: NextRequest) {
     await put(key, JSON.stringify(updated), { access: 'public', contentType: 'application/json' })
     return NextResponse.json({ success: true, game: updated })
   } catch (error: any) {
+    console.error('Rewards PATCH error:', error)
     return NextResponse.json({ success: false, error: error?.message || 'Failed to update' }, { status: 500 })
   }
 }
@@ -85,6 +95,7 @@ export async function DELETE(req: NextRequest) {
     await del(key)
     return NextResponse.json({ success: true })
   } catch (error: any) {
+    console.error('Rewards DELETE error:', error)
     return NextResponse.json({ success: false, error: error?.message || 'Failed to delete' }, { status: 500 })
   }
 }
