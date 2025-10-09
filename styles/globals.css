@@ -11,6 +11,12 @@
   --luvler-blue-light: 140 184 232;
   --luvler-white: 255 255 255;
 
+  /* New neutral palette for stronger contrast */
+  --slate-900: 15 23 42;   /* #0F172A */
+  --slate-800: 30 41 59;   /* #1E293B */
+  --slate-700: 51 65 85;   /* #334155 */
+  --slate-50: 241 245 249; /* #F1F5F9 */
+
   /* Semantic Colors */
   --primary-50: 253 242 248;
   --primary-100: 252 231 243;
@@ -19,9 +25,12 @@
   --success-500: 34 197 94;
   --warning-500: 245 158 11;
 
-  /* Typography */
-  --font-sans: 'DM Sans', 'Inter', system-ui, sans-serif;
-  --font-display: 'DM Sans', 'Inter', system-ui, sans-serif;
+  /* Typography - Anthropic inspired */
+  --font-sans: 'ABC Favorit', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-display: 'ABC Favorit', 'Inter', system-ui, sans-serif;
+  --font-serif: 'Tiempos Text', Georgia, Cambria, 'Times New Roman', Times, serif;
+  --color-text: 15 23 42;
+  --color-muted: 71 85 105;
 
   /* Spacing */
   --radius-sm: 0.125rem;
@@ -59,6 +68,14 @@
 html {
   scroll-behavior: smooth;
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  letter-spacing: -0.01em;
+  overflow-x: hidden;
 }
 
 /* Respect user's motion preferences */
@@ -90,21 +107,63 @@ html {
   outline-offset: 2px;
 }
 
+/* Anthropic-inspired Typography Scale */
+@layer base {
+  p, li {
+    @apply text-[16px] md:text-[17.5px] leading-[1.7] text-slate-800 dark:text-slate-200;
+  }
+  
+  h1 {
+    @apply text-[2rem] sm:text-[2.5rem] md:text-6xl font-semibold tracking-tight text-slate-900 dark:text-slate-50;
+  }
+  
+  h2 {
+    @apply text-3xl md:text-4xl font-semibold mt-12 mb-6 text-slate-900 dark:text-slate-50;
+  }
+  
+  h3 {
+    @apply text-2xl font-medium mt-8 mb-4 text-slate-900 dark:text-slate-50;
+  }
+  
+  h4 {
+    @apply text-xl font-medium mt-6 mb-3 text-slate-900 dark:text-slate-50;
+  }
+}
+
+/* Prevent media from causing horizontal scroll on small screens */
+img, video, canvas, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prevent wide grids from overflowing on mobile */
+.grid {
+  min-width: 0;
+}
+
+/* Utility: clamp long words/URLs to avoid overflow */
+.break-anywhere {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
 /* Autism-friendly design utilities */
 .luvler-card {
-  @apply bg-white dark:bg-gray-800 rounded-2xl shadow-soft border border-gray-100 dark:border-gray-700 p-6 transition-all duration-300;
+  @apply bg-white dark:bg-gray-800 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-gray-100 dark:border-gray-700 p-6 transition-all duration-300;
 }
 
 .luvler-card:hover {
-  @apply shadow-soft-lg transform -translate-y-1;
+  @apply shadow-[0_8px_28px_rgba(0,0,0,0.06)] -translate-y-[2px];
 }
 
 .luvler-button-primary {
-  @apply bg-primary-500 hover:bg-primary-600 text-white rounded-xl px-6 py-3 font-medium shadow-soft transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2;
+  @apply bg-primary-500 text-white rounded-xl px-6 py-3 font-medium shadow-soft transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2;
+  @apply hover:brightness-[1.02] active:translate-y-[1px];
 }
 
 .luvler-button-secondary {
-  @apply bg-secondary-500 hover:bg-secondary-600 text-white rounded-xl px-6 py-3 font-medium shadow-soft transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary-500 focus-visible:ring-offset-2;
+  @apply bg-secondary-500 text-white rounded-xl px-6 py-3 font-medium shadow-soft transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary-500 focus-visible:ring-offset-2;
+  @apply hover:brightness-[1.02] active:translate-y-[1px];
 }
 
 .luvler-input {
@@ -224,4 +283,14 @@ html {
 
 .luvler-gradient-subtle {
   background: linear-gradient(135deg, rgb(var(--primary-50)) 0%, rgb(var(--secondary-50)) 100%);
+}
+
+/* Hide scrollbar but keep scrolling functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
 }

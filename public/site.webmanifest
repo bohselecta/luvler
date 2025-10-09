@@ -1,0 +1,19 @@
+{
+  "name": "Luvler - Love to Learn",
+  "short_name": "Luvler",
+  "description": "An autism-friendly goal setting and self-advocacy tool that helps break down tasks into clear, manageable steps",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#E63E8B",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
+

@@ -16,7 +16,8 @@ import {
   Settings
 } from 'lucide-react';
 import { SelfAdvocacyGoal, SimpleStep, UserPreferences, TextSize } from '@/lib/types';
-import { generateDemoSteps, SELF_ADVOCACY_PROMPTS } from '@/lib/ai-prompts';
+import { generateDemoSteps, buildSelfAdvocacyPrompt } from '@/lib/ai-prompts';
+import { getProcessingModalities, getSpecialInterests } from '@/lib/personalization';
 
 export default function SelfAdvocacyPage() {
   const [currentGoal, setCurrentGoal] = useState<SelfAdvocacyGoal | null>(null);
@@ -87,6 +88,11 @@ export default function SelfAdvocacyPage() {
   ];
 
   const handleGenerateSteps = async () => {
+    if (typeof window !== 'undefined' && !localStorage.getItem('luvler_consent_v1')) {
+      alert('Please review and accept Informed Use before generating a plan.')
+      window.location.href = '/consent'
+      return
+    }
     if (!userGoal.trim()) {
       alert('Please enter what you want to get done');
       return;
@@ -95,9 +101,57 @@ export default function SelfAdvocacyPage() {
     setIsGenerating(true);
 
     try {
-      // Simulate AI processing - in real app, this would call the Netlify function
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Get user's personalization context
+      const modalities = getProcessingModalities();
+      const specialInterests = getSpecialInterests();
 
+      // Try AI generation first
+      if (process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY || true) { // Always try for demo
+        try {
+          const prompt = buildSelfAdvocacyPrompt(userGoal.trim(), {
+            processingModalities: modalities,
+            specialInterests: specialInterests,
+            taskType: 'self-advocacy'
+          });
+
+          // In a real implementation, this would call an API
+          // For now, we'll simulate and use enhanced demo data
+          await new Promise(resolve => setTimeout(resolve, 2000));
+
+          const personalizedSteps = generateDemoSteps(userGoal.trim());
+
+          const newGoal: SelfAdvocacyGoal = {
+            id: `goal-${Date.now()}`,
+            userId: 'demo-user',
+            userGoal: userGoal.trim(),
+            urgency: 'now',
+            steps: personalizedSteps,
+            accommodations: [
+              'Take breaks when needed',
+              'Use your preferred lighting',
+              'Have water or snacks nearby',
+              modalities.includes('visual') ? 'Use visual timers or checklists' : '',
+              modalities.includes('kinesthetic') ? 'Incorporate movement breaks' : '',
+              modalities.includes('narrative') ? 'Frame progress as a story' : ''
+            ].filter(Boolean),
+            estimatedTime: 'About 30 minutes total',
+            completedSteps: [],
+            startedAt: new Date(),
+            preferences: { ...preferences },
+            celebrationMessage: 'You completed all the steps! Great work taking charge of your goals.',
+            achievements: []
+          };
+
+          setCurrentGoal(newGoal);
+          setCurrentStepIndex(0);
+          setIsGenerating(false);
+          return;
+        } catch (aiError) {
+          console.warn('AI generation failed, falling back to demo:', aiError);
+        }
+      }
+
+      // Fallback to basic demo
       const newGoal: SelfAdvocacyGoal = {
         id: `goal-${Date.now()}`,
         userId: 'demo-user',
@@ -383,6 +437,18 @@ export default function SelfAdvocacyPage() {
                             </div>
                           </div>
                         )}
+                        {(step as any).contextualReason && (
+                          <details className="mt-3">
+                            <summary className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 cursor-pointer transition-colors">
+                              ▼ Why this matters (click to expand)
+                            </summary>
+                            <div className="mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                              <p className={`text-gray-700 dark:text-gray-300 ${textSizeClass}`}>
+                                {(step as any).contextualReason}
+                              </p>
+                            </div>
+                          </details>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -405,7 +471,7 @@ export default function SelfAdvocacyPage() {
                   </div>
 
                   {currentGoal.steps[currentStepIndex]?.accommodationTip && (
-                    <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-6 mb-8">
+                    <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-6 mb-6">
                       <div className="flex items-start gap-3">
                         <Lightbulb className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
                         <p className={`text-blue-900 dark:text-blue-300 ${textSizeClass} leading-relaxed`}>
@@ -413,6 +479,19 @@ export default function SelfAdvocacyPage() {
                         </p>
                       </div>
                     </div>
+                  )}
+
+                  {(currentGoal.steps[currentStepIndex] as any)?.contextualReason && (
+                    <details className="mb-8">
+                      <summary className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 cursor-pointer transition-colors flex items-center gap-2">
+                        <span>▼ Why this matters (click to expand)</span>
+                      </summary>
+                      <div className="mt-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+                        <p className={`text-gray-700 dark:text-gray-300 ${textSizeClass} leading-relaxed`}>
+                          {(currentGoal.steps[currentStepIndex] as any).contextualReason}
+                        </p>
+                      </div>
+                    </details>
                   )}
 
                   <button

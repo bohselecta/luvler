@@ -108,8 +108,9 @@ const config: Config = {
         }
       },
       fontFamily: {
-        sans: ['DM Sans', 'Inter', 'system-ui', 'sans-serif'],
-        display: ['DM Sans', 'Inter', 'system-ui', 'sans-serif'],
+        sans: ['"ABC Favorit"', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+        display: ['"ABC Favorit"', 'Inter', 'system-ui', 'sans-serif'],
+        serif: ['"Tiempos Text"', 'Georgia', 'Cambria', '"Times New Roman"', 'Times', 'serif'],
       },
       fontSize: {
         'xs': ['0.75rem', { lineHeight: '1rem' }],
