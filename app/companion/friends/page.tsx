@@ -56,8 +56,8 @@ export default function FriendsPage() {
         <h3 className="font-semibold text-gray-900 mb-3">How it works</h3>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-16 h-16 rounded-lg bg-gray-50 flex items-center justify-center">
-              <Image src="/icon-understanding.png" width={64} height={64} alt="Understanding icon" />
+            <div className="w-16 h-16 rounded-lg bg-gray-50 relative">
+              <Image src="/icon-understanding.png" alt="Understanding icon" fill sizes="64px" className="object-contain p-1" />
             </div>
             <div>
               <p className="text-sm font-medium text-gray-900">Understanding</p>
@@ -65,8 +65,8 @@ export default function FriendsPage() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <div className="w-16 h-16 rounded-lg bg-gray-50 flex items-center justify-center">
-              <Image src="/icon-practice.png" width={64} height={64} alt="Practice icon" />
+            <div className="w-16 h-16 rounded-lg bg-gray-50 relative">
+              <Image src="/icon-practice.png" alt="Practice icon" fill sizes="64px" className="object-contain p-1" />
             </div>
             <div>
               <p className="text-sm font-medium text-gray-900">Practice</p>
@@ -74,8 +74,8 @@ export default function FriendsPage() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <div className="w-16 h-16 rounded-lg bg-gray-50 flex items-center justify-center">
-              <Image src="/icon-connect.png" width={64} height={64} alt="Connect icon" />
+            <div className="w-16 h-16 rounded-lg bg-gray-50 relative">
+              <Image src="/icon-connect.png" alt="Connect icon" fill sizes="64px" className="object-contain p-1" />
             </div>
             <div>
               <p className="text-sm font-medium text-gray-900">Connect</p>
@@ -83,8 +83,8 @@ export default function FriendsPage() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <div className="w-16 h-16 rounded-lg bg-gray-50 flex items-center justify-center">
-              <Image src="/icon-reflect.png" width={64} height={64} alt="Reflect icon" />
+            <div className="w-16 h-16 rounded-lg bg-gray-50 relative">
+              <Image src="/icon-reflect.png" alt="Reflect icon" fill sizes="64px" className="object-contain p-1" />
             </div>
             <div>
               <p className="text-sm font-medium text-gray-900">Reflect</p>
