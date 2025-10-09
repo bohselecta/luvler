@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Play, CheckCircle, RotateCcw, Sparkles, MessageCircle, Users, Mic } from 'lucide-react';
+import { logClientEvent } from '@/components/shared/analytics';
 
 export default function PracticePage() {
   const router = useRouter();
@@ -98,6 +99,10 @@ export default function PracticePage() {
     const newCompleted = new Set(completedExercises);
     newCompleted.add(exerciseIndex);
     setCompletedExercises(newCompleted);
+    try {
+      const ex = practiceExercises[exerciseIndex]
+      logClientEvent('practice.completed', { title: ex.title, difficulty: ex.difficulty })
+    } catch {}
   };
 
   const resetExercise = (exerciseIndex: number) => {

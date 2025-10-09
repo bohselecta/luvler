@@ -47,6 +47,13 @@ export function getSpecialInterests(): string[] {
   return profile.specialInterests || profile.interests || [];
 }
 
+// Preferred community neurotype
+export function getCommunityPreference(): 'autistic-only' | 'mixed' {
+  const profile = getOnboardingProfile();
+  const pref = (profile as any).communityPreference as 'autistic-only' | 'mixed' | undefined
+  return pref || 'autistic-only'
+}
+
 // Check if user has completed enhanced onboarding
 export function hasEnhancedOnboarding(): boolean {
   const profile = getOnboardingProfile();

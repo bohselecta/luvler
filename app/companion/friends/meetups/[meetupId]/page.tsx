@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
 import { ArrowLeft, Users, Calendar, Clock, Settings, Heart, MessageCircle, Mic, MicOff } from 'lucide-react';
 import { VirtualMeetup, MeetupSettings } from '@/lib/types';
+import { logClientEvent } from '@/components/shared/analytics';
 
 export default function MeetupRoomPage() {
   const router = useRouter();
@@ -57,6 +58,7 @@ export default function MeetupRoomPage() {
         setIsJoined(true);
         // Refresh meetup data
         await fetchMeetup();
+        try { logClientEvent('meetup.joined', { meetupId }) } catch {}
       } else {
         alert(data.error || 'Failed to join meetup');
       }

@@ -6,31 +6,36 @@ import { TrackMap } from '@/components/companion/TrackMap'
 import { Heart, Target, Users } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import OnboardingPage from '@/app/onboarding/page'
 export default function CompanionPage() {
   const [defaults, setDefaults] = useState<{ role?: string; interests?: string[]; goal?: string } | null>(null)
   const [showWelcome, setShowWelcome] = useState(false)
+  const [needsOnboarding, setNeedsOnboarding] = useState(false)
   useEffect(() => {
     try {
+      const v2 = localStorage.getItem('luvler_onboarding_v2')
+      if (!v2) setNeedsOnboarding(true)
       const raw = localStorage.getItem('luvler_onboarding_v1')
-      if (raw) {
-        setDefaults(JSON.parse(raw))
-        setShowWelcome(true)
-      }
+      if (raw) { setDefaults(JSON.parse(raw)); setShowWelcome(true) }
     } catch {}
   }, [])
   return (
     <div className="max-w-6xl mx-auto px-4 py-12">
       <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Companion</h1>
-          <p className="text-gray-700 mt-2">Your confidence journey, one step at a time.</p>
-        </div>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">Companion</h1>
+                <p className="text-gray-700 mt-2">One small step, then the next. Clear, literal guidance.</p>
+              </div>
         <Link href="/privacy" className="text-sm text-primary-600 hover:text-primary-700 font-medium">
           Privacy Settings →
         </Link>
       </div>
 
-      {showWelcome && (
+      {needsOnboarding ? (
+        <div className="max-w-3xl mx-auto">
+          <OnboardingPage />
+        </div>
+      ) : showWelcome && (
         <div className="mb-8 p-4 border border-success-200 bg-success-50 rounded-xl flex items-center justify-between">
           <div className="text-success-900 text-sm">Quick‑start generated from your onboarding. You can change it anytime.</div>
           <div className="flex gap-2">

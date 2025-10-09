@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Heart, BookOpen, Users, Sparkles, ChevronRight, ArrowLeft } from 'lucide-react';
 import { FriendshipStep } from '@/lib/types';
 import { getProcessingModalities, getSpecialInterests } from '@/lib/personalization';
+import { logClientEvent } from '@/components/shared/analytics';
 
 type FriendshipPhase = 'understanding' | 'practice' | 'opportunities' | 'confidence';
 
@@ -100,6 +101,8 @@ export function FriendshipPlanner({
         setSteps(d.steps)
         // Mark understanding phase as completed when we generate steps
         setCompletedPhases(new Set<FriendshipPhase>(['understanding']))
+        // log analytics
+        logClientEvent('friendship.pathway.created', { title, steps: d.steps.length })
       }
     } finally {
       setLoading(false)
@@ -203,6 +206,9 @@ export function FriendshipPlanner({
             >
               {loading ? 'Creating your pathway...' : 'Generate Friendship Pathway'}
             </button>
+            <p className="text-sm text-gray-600">
+              After you try a step, reflect, then try it with a different person or in a new context next time. Practice → Reflection → Generalize.
+            </p>
           </div>
         )}
 

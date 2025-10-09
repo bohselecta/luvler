@@ -25,65 +25,51 @@ export default function RouterScreen() {
             A neurodivergent life companion—at home and in clinic
           </h1>
           <p className="mt-4 md:mt-6 text-lg md:text-[22px] leading-[1.7] font-normal text-slate-600 max-w-[48ch] font-serif">
-            Clear steps for goals. Gentle tools for friendships, learning, and daily independence. Built for how you think, not how others expect you to.
+            Simple steps for your goals. Gentle tools for friendships, learning, and daily life. Built for how you think.
           </p>
         </div>
 
-        {/* Path Selection Cards */}
+        {/* Hero: Two big doors */}
         <div className="grid gap-6 mb-12 md:grid-cols-12">
-          {/* Self-Advocacy Path */}
-          <button
-            onClick={() => handlePathSelect('self-advocacy')}
-            className="group w-full bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-8 text-left border border-gray-100 hover:border-primary-200 md:col-span-6"
+          {/* Companion Door */}
+          <a
+            href="/companion"
+            className="group w-full bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-0 border border-gray-100 md:col-span-6 overflow-hidden"
+            aria-label="Start Companion"
           >
-            <div className="flex items-start gap-6">
-              <div className="bg-gradient-to-br from-primary-100 to-primary-200 p-4 rounded-2xl group-hover:scale-105 transition-transform flex-shrink-0">
-                <Heart className="w-10 h-10 text-primary-600" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-3">
-                  <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">I am on the autism spectrum</h2>
-                  <div className="bg-primary-100 text-primary-700 px-3 py-1 rounded-full text-sm font-medium self-start sm:self-center">
-                    Self-Advocacy
-                  </div>
-                </div>
-                <p className="text-slate-600 text-[1rem] leading-[1.6] font-serif mb-6">
-                  Get help breaking down tasks into clear, manageable steps you can follow at your own pace.
-                </p>
-                <div className="flex items-center gap-2 text-primary-600 font-medium group-hover:text-primary-700 transition-colors">
-                  <span>Create my step‑by‑step plan</span>
-                  <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </div>
+            <picture>
+              <source srcSet="/hero-companion.png" type="image/png" />
+              <img src="/hero-companion.svg" alt="Companion hero placeholder" className="w-full h-[220px] object-cover" />
+            </picture>
+            <div className="p-8">
+              <h2 className="text-2xl font-semibold text-gray-900">Start Companion</h2>
+              <p className="text-slate-600 mt-2">Simple steps for goals. Gentle tools for friendships, learning, and daily life.</p>
+              <div className="mt-4 inline-flex items-center gap-2 text-primary-600 font-medium group-hover:text-primary-700">
+                <span>Start Companion</span>
+                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </div>
             </div>
-          </button>
+          </a>
 
-          {/* Professional Path */}
-          <button
-            onClick={() => handlePathSelect('professional')}
-            className="group w-full bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-8 text-left border border-gray-100 hover:border-secondary-200 md:col-span-6"
+          {/* Clinician Door */}
+          <a
+            href="/professional"
+            className="group w-full bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-0 border border-gray-100 md:col-span-6 overflow-hidden"
+            aria-label="See clinician tools"
           >
-            <div className="flex items-start gap-6">
-              <div className="bg-gradient-to-br from-secondary-100 to-secondary-200 p-4 rounded-2xl group-hover:scale-105 transition-transform flex-shrink-0">
-                <Users className="w-10 h-10 text-secondary-600" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-3">
-                  <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">I'm a clinician or caregiver</h2>
-                  <div className="bg-secondary-100 text-secondary-700 px-3 py-1 rounded-full text-sm font-medium self-start sm:self-center">
-                    Professional
-                  </div>
-                </div>
-                <p className="text-slate-600 text-[1rem] leading-[1.6] font-serif mb-6">
-                  Access comprehensive ABA tools for clinicians and parents with evidence-based goal setting and progress tracking.
-                </p>
-                <div className="flex items-center gap-2 text-secondary-600 font-medium group-hover:text-secondary-700 transition-colors">
-                  <span>Build a research‑backed plan</span>
-                  <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </div>
+            <picture>
+              <source srcSet="/hero-clinician.png" type="image/png" />
+              <img src="/hero-clinician.svg" alt="Clinician hero placeholder" className="w-full h-[220px] object-cover" />
+            </picture>
+            <div className="p-8">
+              <h2 className="text-2xl font-semibold text-gray-900">For Clinicians</h2>
+              <p className="text-slate-600 mt-2">Clinic‑ready goals, parent‑friendly language, and consent‑first sharing.</p>
+              <div className="mt-4 inline-flex items-center gap-2 text-secondary-600 font-medium group-hover:text-secondary-700">
+                <span>See clinician tools</span>
+                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </div>
             </div>
-          </button>
+          </a>
         </div>
 
         {/* Features Preview */}
@@ -95,31 +81,64 @@ export default function RouterScreen() {
                 <Heart className="w-8 h-8 text-pink-600" />
               </div>
               <h4 className="font-bold text-gray-900 mb-2">Friendship as Confidence</h4>
-              <p className="text-gray-600">Build social confidence through structured friendship pathways, not conformity</p>
+              <p className="text-gray-600">Build confidence with small, structured steps and interest‑based groups</p>
             </div>
             <div className="text-center">
               <div className="bg-blue-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Sparkles className="w-8 h-8 text-blue-600" />
               </div>
               <h4 className="font-bold text-gray-900 mb-2">Personalized to How You Think</h4>
-              <p className="text-gray-600">AI adapts language and examples based on your processing modality and special interests</p>
+              <p className="text-gray-600">We adapt language and examples to your processing style and interests</p>
             </div>
             <div className="text-center">
               <div className="bg-purple-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Target className="w-8 h-8 text-purple-600" />
               </div>
               <h4 className="font-bold text-gray-900 mb-2">Your Autonomy Matters</h4>
-              <p className="text-gray-600">Self-directed reward systems and full control over data sharing with clinicians</p>
+              <p className="text-gray-600">You choose the goal, the pace, and who can see your data</p>
             </div>
           </div>
         </div>
 
-        {/* Start Companion CTA */}
-        <div className="luvler-card mt-8 text-center">
-          <h3 className="text-xl font-bold text-gray-900">Ready to try the Companion?</h3>
-          <p className="text-gray-700 mt-2">Answer 60 seconds of questions to get a quick‑start pack.</p>
-          <div className="mt-4">
-            <a href="/onboarding" className="luvler-button-primary">Start Companion</a>
+        {/* Companion Preview */}
+        <div className="luvler-card mt-8">
+          <div className="grid md:grid-cols-2 gap-6 items-center">
+            <div>
+              <h3 className="text-2xl font-semibold text-slate-900 mb-2">Companion: one clear step at a time</h3>
+              <p className="text-gray-700">You choose the goal and the pace. We adapt to how you think and what you care about.</p>
+              <div className="mt-4 inline-flex items-center gap-2 text-primary-600 font-medium">
+                <a href="/companion" className="luvler-button-primary">Start Companion</a>
+                <a href="#companion-how" className="luvler-button-secondary">See how it works</a>
+              </div>
+            </div>
+            <div>
+              <picture>
+                <source srcSet="/preview-companion-desktop.png" type="image/png" />
+                <img src="/preview-companion-desktop.svg" alt="Companion dashboard preview placeholder" className="w-full rounded-xl border border-gray-200" />
+              </picture>
+            </div>
+          </div>
+        </div>
+
+        {/* Removed research-backed rooms explainer to reduce cognitive load on first view */}
+
+        {/* For Clinicians */}
+        <div className="mt-8 bg-white/80 backdrop-blur-sm rounded-2xl p-8 border border-gray-200">
+          <div className="grid md:grid-cols-2 gap-6 items-center">
+            <div>
+              <h3 className="text-2xl font-semibold text-slate-900 mb-3">For clinicians</h3>
+              <p className="text-gray-700 mb-4">Design clinic‑ready goals your families can actually use. Translate to parent‑friendly steps. Share progress with clear consent.</p>
+              <div className="inline-flex gap-2">
+                <a href="/professional" className="luvler-button-secondary">See clinician tools</a>
+                <a href="/pricing" className="luvler-button-secondary">Pricing</a>
+              </div>
+            </div>
+            <div>
+              <picture>
+                <source srcSet="/preview-clinician-goal.png" type="image/png" />
+                <img src="/preview-clinician-goal.svg" alt="Clinician goal editor preview placeholder" className="w-full rounded-xl border border-gray-200" />
+              </picture>
+            </div>
           </div>
         </div>
 

@@ -157,7 +157,7 @@ export default function PrivacyPage() {
           Back
         </button>
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Privacy & Data Sharing</h1>
-        <p className="text-gray-700">You control who sees your information and how it's used.</p>
+        <p className="text-gray-700">You choose who sees your data. Change your mind anytime.</p>
       </div>
 
       {/* Current Sharing Status */}
@@ -233,6 +233,27 @@ export default function PrivacyPage() {
           })}
         </div>
       </div>
+
+      {/* Recent Access Log */}
+      {auditLogs && auditLogs.length > 0 && (
+        <div className="luvler-card mb-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <Database className="w-5 h-5 text-blue-600" />
+            Recent Access (last 5)
+          </h2>
+          <ul className="space-y-2 text-sm text-gray-700">
+            {auditLogs.slice(0,5).map((log, idx) => (
+              <li key={idx} className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 bg-gray-400 rounded-full" />
+                {new Date(log.timestamp).toLocaleString()} — {log.accessType} {log.dataType} by {log.accessorId}
+              </li>
+            ))}
+          </ul>
+          <p className="text-xs text-gray-500 mt-3">
+            You control access. You can revoke clinician sharing at any time.
+          </p>
+        </div>
+      )}
 
       {/* Sharing Controls */}
       <div className="luvler-card mb-8">

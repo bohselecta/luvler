@@ -21,4 +21,16 @@ export function Analytics() {
   return null
 }
 
+// Lightweight client event logger
+export async function logClientEvent(type: string, payload?: Record<string, any>) {
+  if (typeof window === 'undefined') return
+  try {
+    await fetch('/api/log-client', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ t: type, ...payload, ts: Date.now() })
+    })
+  } catch {}
+}
+
 

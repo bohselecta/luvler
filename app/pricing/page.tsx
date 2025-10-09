@@ -57,6 +57,32 @@ export default function PricingPage() {
               <Link href="#" className="luvler-button-secondary">Book a clinic demo</Link>
             </div>
           </div>
+          <div className="luvler-card">
+            <h3 className="text-lg font-bold text-gray-900">For Clinicians (solo practitioners)</h3>
+            <ul className="mt-4 space-y-2 text-gray-700 list-disc list-inside">
+              <li>Structured goals built in (SMART, ABC, task analysis)</li>
+              <li>Parent‑friendly summaries for home carryover</li>
+              <li>Consent‑first sharing with access logs and audit trail</li>
+              <li>Language and pacing designed for neurodivergent users</li>
+            </ul>
+            <div className="mt-4">
+              <Link href="/professional" className="luvler-button-secondary">See clinician tools</Link>
+            </div>
+          </div>
+          <div className="luvler-card">
+            <h3 className="text-lg font-bold text-gray-900">Clinic bundle (what you get)</h3>
+            <ul className="mt-4 space-y-2 text-gray-700 list-disc list-inside">
+              <li>5 seats included (add seats as you grow)</li>
+              <li>Roles & permissions (clinician, supervisor)</li>
+              <li>Pooled usage credits across your team</li>
+              <li>Organization‑level audit trail and access logs</li>
+              <li>Shareable progress links for families</li>
+              <li>Priority onboarding, training, and support</li>
+            </ul>
+            <div className="mt-4">
+              <Link href="#" className="luvler-button-secondary">Book a clinic demo</Link>
+            </div>
+          </div>
         </div>
       </div>
     </div>

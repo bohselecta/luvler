@@ -19,12 +19,13 @@ export default function OnboardingPage() {
   const [processingModalities, setProcessingModalities] = useState<ProcessingModality[]>([])
   const [modalityDescription, setModalityDescription] = useState('')
   const [privacyConsent, setPrivacyConsent] = useState(false)
+  const [communityPreference, setCommunityPreference] = useState<'autistic-only' | 'mixed'>('autistic-only')
 
   const chips = ['illustration','anime','cooking','nature walks','games','lego','music']
 
   // Processing modality options with examples
   const modalityOptions: { value: ProcessingModality; label: string; example: string }[] = [
-    { value: 'narrative', label: 'Stories and narratives', example: 'Malachi thinks in stories - he can relate any life experience back to a story from somewhere' },
+    { value: 'narrative', label: 'Stories and narratives', example: 'Thinks in stories — can relate life experiences back to stories from somewhere' },
     { value: 'visual', label: 'Visual patterns and images', example: 'Thinks in pictures, diagrams, and visual relationships' },
     { value: 'systematic', label: 'Systems and how things connect', example: 'Sees patterns, processes, and logical connections between things' },
     { value: 'numerical', label: 'Numbers and data', example: 'Understands concepts through numbers, sequences, and quantitative relationships' },
@@ -155,6 +156,23 @@ export default function OnboardingPage() {
       </div>
 
       <div className="luvler-card mt-6">
+        <h2 className="font-semibold text-gray-900">Community preference</h2>
+        <p className="text-sm text-gray-600 mt-1 mb-4">Who do you prefer to connect with in groups?</p>
+        <div className="flex flex-wrap gap-2">
+          {[
+            { value: 'autistic-only', label: 'Autistic-only rooms (recommended)' },
+            { value: 'mixed', label: 'Mixed neurotype rooms' }
+          ].map(opt => (
+            <button
+              key={opt.value}
+              onClick={() => setCommunityPreference(opt.value as any)}
+              className={`px-3 py-1 rounded-full border text-sm ${communityPreference===opt.value?'border-primary-500 bg-primary-50':'border-gray-300'}`}
+            >{opt.label}</button>
+          ))}
+        </div>
+      </div>
+
+      <div className="luvler-card mt-6">
         <h2 className="font-semibold text-gray-900">Privacy & Data</h2>
         <p className="text-sm text-gray-600 mt-1 mb-4">
           Your information is kept private and secure. You can change these settings anytime.
@@ -189,7 +207,8 @@ export default function OnboardingPage() {
                 specialInterests,
                 processingModalities,
                 modalityDescription,
-                privacyConsent
+                privacyConsent,
+                communityPreference
               }
               localStorage.setItem('luvler_onboarding_v2', JSON.stringify(enhancedProfile))
 

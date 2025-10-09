@@ -149,6 +149,8 @@ export default function ExplorePage() {
           <ArrowLeft className="w-4 h-4" />
           Back to Friendship Builder
         </button>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Friendship — one clear step at a time</h1>
+        <p className="text-gray-700">Try a step. Reflect. Then try it with a different person or place.</p>
         <div className="flex items-center gap-4 mb-4">
           <div className="flex-1 bg-gray-200 rounded-full h-2">
             <div

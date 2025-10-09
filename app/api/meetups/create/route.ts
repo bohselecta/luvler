@@ -18,6 +18,7 @@ export async function POST(request: Request) {
       specialInterest,
       templateId,
       settings = {},
+      neurotype = 'autistic-only',
       scheduledFor,
       duration = 60
     } = await request.json() as {
@@ -26,6 +27,7 @@ export async function POST(request: Request) {
       specialInterest: string
       templateId: string
       settings?: Partial<MeetupSettings>
+      neurotype?: 'autistic-only' | 'mixed'
       scheduledFor: string
       duration?: number
     }
@@ -50,6 +52,7 @@ export async function POST(request: Request) {
       title,
       topic,
       specialInterest,
+      neurotype,
       hostId: a.userId,
       participants: [{
         userId: a.userId,

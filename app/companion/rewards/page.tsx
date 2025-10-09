@@ -112,7 +112,7 @@ export default function RewardsPage() {
           Back to Companion
         </button>
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Reward Games</h1>
-        <p className="text-gray-700">Create your own motivation system with rewards that matter to you.</p>
+        <p className="text-gray-700">You define the reward logic. Celebrate attempts as progress—even when outcomes vary.</p>
       </div>
 
       {/* Active Games */}

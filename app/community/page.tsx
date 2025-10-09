@@ -7,6 +7,7 @@ import { MessagePractice } from '@/components/companion/MessagePractice';
 export default function CommunityPage() {
   const [activeTab, setActiveTab] = useState<'groups' | 'safety' | 'practice'>('groups');
   const [showPractice, setShowPractice] = useState(false);
+  const [neurotype, setNeurotype] = useState<'autistic-only' | 'mixed'>('autistic-only');
 
   const safetyFeatures = [
     {
@@ -58,6 +59,9 @@ export default function CommunityPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Community</h1>
         <p className="text-gray-700">Safe, structured spaces for neurodivergent connection and growth.</p>
+        <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-900 text-sm">
+          Designed for teens/young adults. Moderators keep rooms age-appropriate. Virtual groups are an evidence-informed pilot; we measure outcomes.
+        </div>
       </div>
 
       {/* Navigation Tabs */}
@@ -85,6 +89,17 @@ export default function CommunityPage() {
       {/* Groups Tab */}
       {activeTab === 'groups' && (
         <div className="space-y-6">
+          <div className="flex items-center gap-3">
+            <label className="text-sm text-gray-700">Room type</label>
+            <select
+              value={neurotype}
+              onChange={(e) => setNeurotype(e.target.value as any)}
+              className="px-3 py-2 border border-gray-300 rounded-lg text-sm"
+            >
+              <option value="autistic-only">Autistic-only (safer, shared understanding)</option>
+              <option value="mixed">Mixed neurotype</option>
+            </select>
+          </div>
           <div className="text-center py-12">
             <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Interest-Based Groups</h2>

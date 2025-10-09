@@ -443,6 +443,8 @@ export interface OnboardingProfile {
   processingModalities?: ProcessingModality[];
   modalityDescription?: string;
   privacyConsent?: boolean;
+  // Community preference
+  communityPreference?: 'autistic-only' | 'mixed';
 }
 
 // Privacy and Data Sharing Types
@@ -495,6 +497,7 @@ export interface VirtualMeetup {
   title: string;
   topic: string;
   specialInterest: string;
+  neurotype?: 'autistic-only' | 'mixed';
   hostId: string;
   participants: MeetupParticipant[];
   templateId: string;

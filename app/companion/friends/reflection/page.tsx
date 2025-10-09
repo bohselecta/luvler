@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Heart, Star, TrendingUp, MessageCircle, Calendar, Award, Target } from 'lucide-react';
+import { logClientEvent } from '@/components/shared/analytics';
 
 interface ReflectionEntry {
   id: string;
@@ -66,6 +67,10 @@ export default function ReflectionPage() {
 
     const updatedEntries = [newEntry, ...entries];
     saveEntries(updatedEntries);
+
+    try {
+      logClientEvent('reflection.saved', { activity: newEntry.activity, rating: newEntry.rating, mood: newEntry.mood })
+    } catch {}
 
     // Reset form
     setCurrentEntry({

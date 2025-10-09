@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Plus, Users, Calendar, Clock, Search, Filter, Heart } from 'lucide-react';
 import { VirtualMeetup, MeetupTemplate } from '@/lib/types';
+import { getCommunityPreference } from '@/lib/personalization';
 
 export default function MeetupsPage() {
   const router = useRouter();
@@ -13,6 +14,9 @@ export default function MeetupsPage() {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<'all' | 'scheduled' | 'active'>('all');
+  const [neurotypeFilter, setNeurotypeFilter] = useState<'autistic-only' | 'mixed' | 'all'>(() => {
+    try { return getCommunityPreference() } catch { return 'autistic-only' }
+  });
 
   useEffect(() => {
     fetchMeetups();
@@ -29,6 +33,7 @@ export default function MeetupsPage() {
           title: 'Pokemon Card Strategy Discussion',
           topic: 'Share tips and strategies for Pokemon TCG',
           specialInterest: 'pokemon',
+          neurotype: 'autistic-only',
           hostId: 'demo-host',
           participants: [
             { userId: 'demo-host', personalGoals: ['Share 3 strategies', 'Learn new deck ideas'], joinedAt: new Date() },
@@ -54,6 +59,7 @@ export default function MeetupsPage() {
           title: 'Drawing Techniques Share',
           topic: 'Share and learn drawing techniques',
           specialInterest: 'drawing',
+          neurotype: 'autistic-only',
           hostId: 'demo-host-2',
           participants: [
             { userId: 'demo-host-2', personalGoals: ['Show watercolor technique'], joinedAt: new Date() }
@@ -100,8 +106,9 @@ export default function MeetupsPage() {
                          meetup.specialInterest.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesFilter = filterStatus === 'all' || meetup.status === filterStatus;
+    const matchesNeurotype = neurotypeFilter === 'all' || (meetup.neurotype || 'autistic-only') === neurotypeFilter;
 
-    return matchesSearch && matchesFilter;
+    return matchesSearch && matchesFilter && matchesNeurotype;
   });
 
   const handleJoinMeetup = (meetupId: string) => {
@@ -131,6 +138,9 @@ export default function MeetupsPage() {
         </button>
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Virtual Meetups</h1>
         <p className="text-gray-700">Connect with others who share your special interests in structured, supportive environments.</p>
+        <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-900 text-sm">
+          Designed for teens/young adults. Moderators keep rooms age-appropriate.
+        </div>
       </div>
 
       {/* Controls */}
@@ -147,6 +157,16 @@ export default function MeetupsPage() {
         </div>
 
         <div className="flex gap-2">
+          <select
+            value={neurotypeFilter}
+            onChange={(e) => setNeurotypeFilter(e.target.value as any)}
+            className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            title="Neurotype filter"
+          >
+            <option value="autistic-only">Autistic-only (safer, shared understanding)</option>
+            <option value="mixed">Mixed neurotype</option>
+            <option value="all">All</option>
+          </select>
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value as 'all' | 'scheduled' | 'active')}
@@ -206,6 +226,9 @@ export default function MeetupsPage() {
               <div className="flex flex-wrap gap-1">
                 <span className="px-2 py-1 bg-primary-100 text-primary-700 text-xs rounded-full">
                   {meetup.specialInterest}
+                </span>
+                <span className={`px-2 py-1 text-xs rounded-full ${ (meetup.neurotype || 'autistic-only') === 'autistic-only' ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-700' }`}>
+                  {(meetup.neurotype || 'autistic-only') === 'autistic-only' ? 'Autistic-only' : 'Mixed'}
                 </span>
                 {meetup.settings.audioOnly && (
                   <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
@@ -312,6 +335,7 @@ function CreateMeetupModal({ templates, onClose, onCreated }: {
     topic: '',
     specialInterest: '',
     templateId: '',
+    neurotype: 'autistic-only' as 'autistic-only' | 'mixed',
     scheduledFor: '',
     duration: 60
   });
@@ -453,6 +477,20 @@ function CreateMeetupModal({ templates, onClose, onCreated }: {
                 </select>
               </div>
             </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Room Type
+            </label>
+            <select
+              value={formData.neurotype}
+              onChange={(e) => setFormData({ ...formData, neurotype: e.target.value as any })}
+              className="luvler-input w-full"
+            >
+              <option value="autistic-only">Autistic-only (recommended)</option>
+              <option value="mixed">Mixed neurotype</option>
+            </select>
+          </div>
 
             <div className="flex gap-3 pt-4">
               <button
