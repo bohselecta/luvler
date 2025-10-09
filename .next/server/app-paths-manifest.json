@@ -1,8 +1,6 @@
 {
   "/page": "app/page.js",
   "/about/page": "app/about/page.js",
-  "/api/pathways/route": "app/api/pathways/route.js",
-  "/api/log-client/route": "app/api/log-client/route.js",
   "/companion/page": "app/companion/page.js",
   "/companion/friends/page": "app/companion/friends/page.js",
   "/companion/friends/meetups/page": "app/companion/friends/meetups/page.js"

@@ -520,16 +520,8 @@ export default function ProfessionalToolPage() {
               <span className="hidden sm:inline">Back</span>
             </button>
 
-            {/* Center: Logo and stage */}
-            <div className="flex items-center gap-2 md:gap-3 min-w-0">
-              <div className="bg-primary-500 p-2 rounded-xl flex-shrink-0">
-                <BookOpen className="w-4 h-4 md:w-5 md:h-5 text-white" />
-              </div>
-              <div className="min-w-0">
-                <h1 className="text-base md:text-lg font-bold text-gray-900 dark:text-gray-100">Luvler</h1>
-                {/* Removed redundant stage counter */}
-              </div>
-            </div>
+            {/* Center: Stage indicator only (removed logo/title) */}
+            <div className="flex items-center gap-2 md:gap-3 min-w-0" />
 
             {/* Right: Mode Toggle and Demo */}
             <div className="flex items-center gap-2 flex-shrink-0">

@@ -16,7 +16,7 @@ export default function AboutPage() {
         <li><span className="font-semibold">Hayden</span> - Created and built Luvler</li>
         <li><span className="font-semibold">Ryan</span> - Shared insights from working with autistic youth, shaped the friendship module</li>
         <li><span className="font-semibold">Malachi</span> - Tested features and provided feedback as a user</li>
-        <li><span className="font-semibold">Research Partners</span> - Contributed evidence-based practices</li>
+        <li><span className="font-semibold">Rae</span> - Research Partner who contributed evidence-based methodology</li>
         <li><span className="font-semibold">You</span> - Every user helps us improve</li>
       </ul>
 
